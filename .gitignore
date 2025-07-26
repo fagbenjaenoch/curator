@@ -1,0 +1,38 @@
+# Root
+frontend/node_modules
+pnpm-lock.yaml
+.env
+.DS_Store
+
+# React (frontend)
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.env
+
+# Go (cmd/api)
+cmd/api/bin/
+cmd/api/obj/
+cmd/api/*.exe
+cmd/api/*.out
+cmd/api/.env
+cmd/api/vendor/
+cmd/api/coverage/
+cmd/api/test-results/
+
+# Go Build Artifacts
+*.exe
+*.out
+*.test
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
