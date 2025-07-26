@@ -2,4 +2,4 @@
 A resource curating and aggregating tool that makes learning easier.
 
 ## License
-[MIT License](LICENSE.md)
+[MIT License](LICENSE)
