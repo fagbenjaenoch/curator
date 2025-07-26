@@ -1,24 +1,24 @@
 # Root
-frontend/node_modules
+app/frontend/node_modules
 pnpm-lock.yaml
 .env
 .DS_Store
 
-# React (frontend)
-frontend/node_modules/
-frontend/dist/
-frontend/.vite/
-frontend/.env
+# React (app/frontend)
+app/frontend/node_modules/
+app/frontend/dist/
+app/frontend/.vite/
+app/frontend/.env
 
-# Go (cmd/api)
-cmd/api/bin/
-cmd/api/obj/
-cmd/api/*.exe
-cmd/api/*.out
-cmd/api/.env
-cmd/api/vendor/
-cmd/api/coverage/
-cmd/api/test-results/
+# Go (app/backend/cmd/api)
+app/backend/cmd/api/bin/
+app/backend/cmd/api/obj/
+app/backend/cmd/api/*.exe
+app/backend/cmd/api/*.out
+app/backend/cmd/api/.env
+app/backend/cmd/api/vendor/
+app/backend/cmd/api/coverage/
+app/backend/cmd/api/test-results/
 
 # Go Build Artifacts
 *.exe
