@@ -2,10 +2,6 @@
 
 A resource curating and aggregating tool that makes learning easier.
 
-## License
-
-[MIT License](LICENSE)
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -28,18 +24,6 @@ Run the application
 
 ```bash
 make run
-```
-
-Create DB container
-
-```bash
-make docker-run
-```
-
-Shutdown DB Container
-
-```bash
-make docker-down
 ```
 
 DB Integrations Test:
@@ -65,3 +49,7 @@ Clean up binary from the last build:
 ```bash
 make clean
 ```
+
+## License
+
+[MIT License](LICENSE)
