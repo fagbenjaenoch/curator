@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router"
-import Home from "@/pages/Home"
-import Landing from "@/pages/Landing"
+import Home from "@/components/pages/Home"
+import Landing from "@/components/pages/Landing"
 
 function App() {
   return (

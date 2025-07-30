@@ -25,6 +25,17 @@ export default tseslint.config([
     plugins: {
       import: pluginImport,
     },
+    settings: {
+      "import/resolver": {
+        node: {
+          extensions: [".js", ".jsx", ".ts", ".tsx"]
+        },
+        alias: {
+          map: [["@", "./src"]],
+          extensions: [".js", ".jsx", ".ts", ".tsx"]
+        }
+      }
+    },
     rules: {
       "import/order": [
         "error",
@@ -40,6 +51,17 @@ export default tseslint.config([
             "type",
           ],
           alphabetize: { order: "asc", caseInsensitive: true },
+        },
+      ],
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [ "./", "../*", ".*"],
+              message: "Use @/ for absolute imports instead of relative paths.",
+            },
+          ],
         },
       ],
     },
