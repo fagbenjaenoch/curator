@@ -1,11 +1,12 @@
 import Navbar from "@/components/Navbar";
 import ovalMarker from "@/assets/oval marker.svg";
+import Dropzone from "@/components/Dropzone";
 
 export default function Landing() {
   return (
     <div>
       <Navbar />
-      <section className="m-auto mt-[200px] px-4 max-w-7xl mx-auto text-center">
+      <section className="mt-[200px] px-4 max-w-7xl mx-auto text-center">
         <h1>
           Need help with your document?
           <br />
@@ -18,7 +19,9 @@ export default function Landing() {
             <span>instantly</span>
           </span>
         </h1>
-        <div></div>
+        <div className=" max-w-7x">
+          <Dropzone />
+        </div>
       </section>
     </div>
   );
