@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import ovalMarker from "@/assets/oval marker.svg";
 
 export default function Landing() {
   return (
@@ -6,9 +7,15 @@ export default function Landing() {
       <Navbar />
       <section className="m-auto mt-[200px] px-4 max-w-7xl mx-auto text-center">
         <h1>
-          <span className="block">Need help with your document?</span>
-          <span className="transform scale-70 text-center">
-            Get curated resources instantly
+          Need help with your document?
+          <br />
+          Get curated resources{" "}
+          <span className="relative text-amber-300">
+            <img
+              src={ovalMarker}
+              className="absolute transform right-[-1px] top-[-20px] scale-[140%] "
+            />
+            <span>instantly</span>
           </span>
         </h1>
         <div></div>
