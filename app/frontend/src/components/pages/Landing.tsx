@@ -6,7 +6,7 @@ export default function Landing() {
   return (
     <div>
       <Navbar />
-      <section className="mt-[200px] px-4 max-w-7xl mx-auto text-center">
+      <section className="mt-[100px] px-4 max-w-7xl mx-auto text-center">
         <h1>
           Need help with your document?
           <br />
