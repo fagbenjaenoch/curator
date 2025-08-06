@@ -110,16 +110,30 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+@font-face {
+  font-family: "Satoshi-Variable";
+  src: url("./fonts/Satoshi-Variable.woff") format("woff");
+  font-weight: 300 900;
+  font-display: swap;
+  font-style: normal;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "Satoshi-Variable", sans-serif;
   }
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   @apply font-bold;
 }
 
