@@ -4,10 +4,12 @@ export default function Landing() {
   return (
     <div>
       <Navbar />
-      <section className="m-auto mt-[200px] px-4 fle">
+      <section className="m-auto mt-[200px] px-4 max-w-7xl mx-auto text-center">
         <h1>
-          Get a list of resources to understand your document{" "}
-          <span className="italic underline">right now</span>
+          <span className="block">Need help with your document?</span>
+          <span className="transform scale-70 text-center">
+            Get curated resources instantly
+          </span>
         </h1>
         <div></div>
       </section>
