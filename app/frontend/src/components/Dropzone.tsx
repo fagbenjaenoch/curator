@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
 
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
@@ -11,7 +12,10 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     <div
       {...getRootProps()}
       {...props}
-      className="grid place-items-center border-8 border-dashed rounded-md w-[700px] h-[500px] cursor-pointer mt-8  mx-auto"
+      className={cn(
+        "grid place-items-center border-8 border-dashed rounded-lg w-[700px] h-[500px] cursor-pointer mt-8  mx-auto",
+        isDragActive && "border-blue-500",
+      )}
     >
       <input {...getInputProps()} />
       {isDragActive ? (
