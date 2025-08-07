@@ -14,7 +14,7 @@ export default function Landing() {
           <span className="relative text-amber-300">
             <img
               src={ovalMarker}
-              className="absolute transform right-[-1px] top-[-20px] scale-[140%] "
+              className="absolute transform right-[-1px] top-[-20px] scale-[160%] "
             />
             <span>instantly</span>
           </span>
