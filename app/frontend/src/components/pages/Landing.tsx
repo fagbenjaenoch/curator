@@ -24,7 +24,7 @@ export default function Landing() {
         </div>
       </section>
       <footer>
-        <div className="max-w-7xl mx-auto  py-16">
+        <div className="max-w-7xl mx-auto px-8 pt-16">
           <div className="flex justify-between">
             <small>Built with a step out of comfort</small>
             <small>Github X</small>
