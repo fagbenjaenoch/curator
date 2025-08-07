@@ -11,7 +11,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     <div
       {...getRootProps()}
       {...props}
-      className="grid place-items-center border-2 border-dashed w-[600px] h-[600px] cursor-pointer mt-8  mx-auto"
+      className="grid place-items-center border-8 border-dashed rounded-md w-[700px] h-[500px] cursor-pointer mt-8  mx-auto"
     >
       <input {...getInputProps()} />
       {isDragActive ? (
