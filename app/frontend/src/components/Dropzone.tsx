@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
+import { UploadIcon } from "lucide-react";
 
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -22,7 +23,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
       {...getRootProps()}
       {...props}
       className={cn(
-        "grid place-items-center border-8 border-dashed rounded-4xl w-[400px] h-[300px] lg:w-[700px] lg:h-[500px] cursor-pointer mt-8 mx-auto transition-colors",
+        "grid place-items-center border-8 border-dashed border-gray-200 hover:border-gray-300 rounded-4xl w-[400px] h-[300px] lg:w-[700px] lg:h-[500px] cursor-pointer mt-8 mx-auto transition-colors",
         isDragActive && "border-blue-500",
       )}
     >
@@ -30,7 +31,15 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
       {isDragActive ? (
         <p>Drop the file here!</p>
       ) : (
-        <p>Select or Drag and drop your document here to get started</p>
+        <div className="text-center">
+          <UploadIcon className="w-8 h-8 text-gray-400 inline-block" />
+          <p className="text-gray-500">
+            Select or drag and drop your files here
+          </p>
+          <p className="text-xs text-gray-400">
+            (PDF, DOC, DOCX, MD up to 20MB)
+          </p>
+        </div>
       )}
     </div>
   );
