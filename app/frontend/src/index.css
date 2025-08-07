@@ -138,15 +138,15 @@ h6 {
 }
 
 h1 {
-  @apply text-3xl sm:text-4xl md:text-5xl;
+  @apply text-3xl lg:text-5xl;
 }
 
 h2 {
-  @apply text-2xl sm:text-3xl md:text-4xl;
+  @apply text-2xl lg:text-4xl;
 }
 
 h3 {
-  @apply text-xl md:text-3xl;
+  @apply text-xl lg:text-3xl;
 }
 
 h4 {
