@@ -23,6 +23,17 @@ export default function Landing() {
           <Dropzone />
         </div>
       </section>
+      <footer>
+        <div className="max-w-7xl mx-auto  py-16">
+          <div className="flex justify-between">
+            <small>Built with a step out of comfort</small>
+            <small>Github X</small>
+          </div>
+          <small className="inline-block w-full text-center mt-4 text-muted-foreground">
+            Enoch Fagbenja
+          </small>
+        </div>
+      </footer>
     </div>
   );
 }
