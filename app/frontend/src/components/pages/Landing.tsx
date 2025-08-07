@@ -19,7 +19,7 @@ export default function Landing() {
             <span>instantly</span>
           </span>
         </h1>
-        <div className=" max-w-7x">
+        <div className="min-h-[300px] max-w-7x">
           <Dropzone />
         </div>
       </section>
