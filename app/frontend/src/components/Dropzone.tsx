@@ -21,9 +21,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
       {isDragActive ? (
         <p>Drop the file here!</p>
       ) : (
-        <p>
-          Drag and Drop some files or click here to select files and get started
-        </p>
+        <p>Select or Drag and drop your document here to get started</p>
       )}
     </div>
   );
