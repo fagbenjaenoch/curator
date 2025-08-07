@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
-  const [files, setFiles] = useState<Array<File>>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [internalErrors, setInternalErrors] = useState<string | null>(null);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -33,7 +33,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     maxSize: 20 * 1024 * 1024, // 20MB
   });
 
-  const removeFile = (file) => {
+  const removeFile = (file: File) => {
     const newFiles = files.filter((f) => f !== file);
     setFiles(newFiles);
   };
@@ -81,7 +81,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
                 </span>
               </div>
 
-              <div className="flex flex-col space-y-1">
+              <div className="flex flex-col items-start space-y-1">
                 <p className="text-sm font-medium truncate max-w-xs">
                   {file.name}
                 </p>
