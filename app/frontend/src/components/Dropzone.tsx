@@ -6,6 +6,14 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     onDrop: (acceptedFile) => {
       console.log(acceptedFile);
     },
+    accept: {
+      // Documents that are allowed
+      "application/pdf": [".pdf"],
+      "application/msword": [".doc"],
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        [".docx"],
+      "text/markdown": [".md"],
+    },
   });
 
   return (
