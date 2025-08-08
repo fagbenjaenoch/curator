@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const [files, setFiles] = useState<File[]>([]);
   const [internalError, setInternalError] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) {
@@ -132,6 +133,9 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
         </div>
 
         <Button onClick={() => handleUpload(files)}>Upload</Button>
+        {uploadError && (
+          <p className="text-xs text-red-500 mt-2">{uploadError}</p>
+        )}
       </div>
     );
   };
