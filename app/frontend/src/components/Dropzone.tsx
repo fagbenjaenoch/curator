@@ -75,42 +75,45 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
 
   const renderFileList = () => {
     return (
-      <div className="mt-4 space-y-2">
-        {files.map((file, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow"
-          >
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center p-5">
-                <span className="text-xs font-medium">
-                  {file.name.split(".").pop()?.toUpperCase()}
-                </span>
+      <div className="mt-4 space-y-4">
+        <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-2">
+          {files.map((file, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow"
+            >
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center p-5">
+                  <span className="text-xs font-medium">
+                    {file.name.split(".").pop()?.toUpperCase()}
+                  </span>
+                </div>
+
+                <div className="flex flex-col items-start space-y-1">
+                  <p className="text-sm font-medium truncate max-w-xs">
+                    {file.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {(file.size / 1024).toFixed(2)} KB
+                  </p>
+                </div>
               </div>
 
-              <div className="flex flex-col items-start space-y-1">
-                <p className="text-sm font-medium truncate max-w-xs">
-                  {file.name}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {(file.size / 1024).toFixed(2)} KB
-                </p>
-              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => removeFile(file)}
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
             </div>
+          ))}
+        </div>
 
-            <Button variant="ghost" size="sm" onClick={() => removeFile(file)}>
-              <Trash2 className="w-4 h-4" />
-            </Button>
-          </div>
-        ))}
+        <Button>Upload</Button>
       </div>
     );
   };
 
-  return (
-    <>
-      {files.length === 0 && renderDropZone()}
-      {renderFileList()}
-    </>
-  );
+  return files.length === 0 ? renderDropZone() : renderFileList();
 }
