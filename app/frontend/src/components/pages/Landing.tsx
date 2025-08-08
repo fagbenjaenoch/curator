@@ -1,6 +1,8 @@
 import Navbar from "@/components/Navbar";
 import ovalMarker from "@/assets/oval marker.svg";
 import Dropzone from "@/components/Dropzone";
+import Github from "@/components/ui/Github";
+import X from "@/components/ui/X";
 
 export default function Landing() {
   return (
@@ -19,19 +21,29 @@ export default function Landing() {
             <span>instantly</span>
           </span>
         </h1>
-        <div className="min-h-[300px] max-w-7x">
+        <div className="min-h-[300px] max-w-7xl mt-32 mb-16">
           <Dropzone />
         </div>
       </section>
       <footer>
-        <div className="max-w-7xl mx-auto px-8 pt-16">
+        <div className="max-w-7xl mx-auto px-8 py-8">
           <div className="flex justify-between">
             <small>Built with a step out of comfort</small>
-            <small>Github X</small>
+            <div className="space-x-4 text-xs">
+              <a
+                href="http://github.com/fagbenjaenoch"
+                className="hover:text-muted-foreground"
+              >
+                <Github className="inline-block hover:text-muted-foreground" />
+              </a>
+              <a
+                href="http://x.com/fagbenjaenoch"
+                className="hover:text-muted-foreground"
+              >
+                <X className="inline-block" />
+              </a>
+            </div>
           </div>
-          <small className="inline-block w-full text-center mt-4 text-muted-foreground">
-            Enoch Fagbenja
-          </small>
         </div>
       </footer>
     </div>

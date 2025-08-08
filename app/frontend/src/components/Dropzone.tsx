@@ -5,9 +5,12 @@ import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
+  const FILE_THRESHOLD = 20 * 1024 * 1024; // 20MB
   const [files, setFiles] = useState<File[]>([]);
   const [internalError, setInternalError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  let totalFileSize = 0;
+  files.forEach((file) => (totalFileSize = totalFileSize + file.size));
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) {
@@ -24,17 +27,27 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     setFiles(newFiles);
   }, []);
 
-  const handleUpload = (files: File[]) => {
+  const handleUpload = async (files: File[]) => {
     if (files.length === 0) {
       return;
     }
 
-    let totalFileSize = 0;
-    files.forEach((file) => (totalFileSize = totalFileSize + file.size));
-
-    if (totalFileSize > 20 * 1024 * 1024) {
+    setUploadError("");
+    if (totalFileSize > FILE_THRESHOLD) {
       setUploadError("Files are more than 20MB");
       return;
+    }
+
+    const formData = new FormData();
+    files.forEach((file) => formData.append(file.name, file));
+
+    try {
+      const response = await fetch("https://localhost:3000/api/v1", {
+        body: formData,
+      });
+      const data = await response.json();
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -79,7 +92,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
         {...getRootProps()}
         {...props}
         className={cn(
-          "grid place-items-center border-8 border-dashed border-gray-200 hover:border-gray-300 rounded-4xl w-[400px] h-[300px] lg:w-[700px] lg:h-[500px] cursor-pointer mt-8 mx-auto transition-colors",
+          "grid place-items-center border-8 border-dashed border-gray-200 hover:border-gray-300 rounded-4xl w-[400px] h-[300px] lg:w-[700px] lg:h-[400px] cursor-pointer mx-auto transition-colors",
           isDragActive && "border-blue-500",
         )}
       >
@@ -103,7 +116,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
 
   const renderFileList = () => {
     return (
-      <div className="mt-4 space-y-4">
+      <div className="space-y-4">
         <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-2">
           {files.map((file, index) => (
             <div
@@ -138,7 +151,9 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
           ))}
         </div>
 
-        <Button onClick={() => handleUpload(files)}>Upload</Button>
+        <Button onClick={() => handleUpload(files)} className="cursor-pointer">
+          Upload
+        </Button>
         {uploadError && (
           <p className="text-xs text-red-500 mt-2">{uploadError}</p>
         )}
