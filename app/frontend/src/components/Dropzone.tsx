@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const [files, setFiles] = useState<File[]>([]);
-  const [internalErrors, setInternalErrors] = useState<string | null>(null);
+  const [internalError, setInternalError] = useState<string | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) {
-      setInternalErrors("No valid files were dropped");
+      setInternalError("No valid files were dropped");
       return;
     }
 
@@ -22,6 +22,14 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
 
     setFiles(newFiles);
   }, []);
+
+  const handleUpload = (files: File[]) => {
+    if (files.length === 0) {
+      return;
+    }
+
+    console.log(files);
+  };
 
   // Documents that are allowed
   const acceptedFiletypes = {
@@ -45,6 +53,19 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     setFiles(newFiles);
   };
 
+  const computeFileSize = (file: File) => {
+    switch (true) {
+      case file.size < 1024: // Less than 1KB
+        return `${file.size.toFixed(2)} B`;
+      case file.size < 1024 * 1024: // Less than 1MB
+        return `${(file.size / 1024).toFixed(2)} KB`;
+      case file.size < 1024 * 1024 * 1024: // Less than 1GB
+        return `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+      default:
+        return `${(file.size / 1024).toFixed(2)} KB`;
+    }
+  };
+
   const renderDropZone = () => {
     return (
       <div
@@ -66,8 +87,8 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
           </p>
         </div>
 
-        {internalErrors && (
-          <p className="text-xs text-red-500 mt-2">{internalErrors}</p>
+        {internalError && (
+          <p className="text-xs text-red-500 mt-2">{internalError}</p>
         )}
       </div>
     );
@@ -94,7 +115,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
                     {file.name}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {(file.size / 1024).toFixed(2)} KB
+                    {computeFileSize(file)}
                   </p>
                 </div>
               </div>
@@ -110,7 +131,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
           ))}
         </div>
 
-        <Button>Upload</Button>
+        <Button onClick={() => handleUpload(files)}>Upload</Button>
       </div>
     );
   };
