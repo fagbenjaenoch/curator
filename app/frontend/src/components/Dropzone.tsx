@@ -29,7 +29,13 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
       return;
     }
 
-    console.log(files);
+    let totalFileSize = 0;
+    files.forEach((file) => (totalFileSize = totalFileSize + file.size));
+
+    if (totalFileSize > 20 * 1024 * 1024) {
+      setUploadError("Files are more than 20MB");
+      return;
+    }
   };
 
   // Documents that are allowed
