@@ -77,7 +77,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center p-5">
                 <span className="text-xs font-medium">
-                  {file.name.split(".").pop().toUpperCase()}
+                  {file.name.split(".").pop()?.toUpperCase()}
                 </span>
               </div>
 
