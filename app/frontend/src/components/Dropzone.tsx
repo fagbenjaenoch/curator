@@ -1,35 +1,42 @@
 import { cn } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
 import { Trash2, UploadIcon } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const [files, setFiles] = useState<File[]>([]);
   const [internalErrors, setInternalErrors] = useState<string | null>(null);
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles.length === 0) {
+      setInternalErrors("No valid files were dropped");
+      return;
+    }
+
+    const newFiles = acceptedFiles.map((file) =>
+      Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      }),
+    );
+
+    setFiles(newFiles);
+  }, []);
+
+  // Documents that are allowed
+  const acceptedFiletypes = {
+    "application/pdf": [".pdf"],
+    "application/msword": [".doc"],
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
+      ".docx",
+    ],
+    "text/markdown": [".md"],
+  };
+
+  // Setup Dropzone
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: (acceptedFiles) => {
-      if (acceptedFiles.length === 0) {
-        setInternalErrors("No valid files were dropped");
-        return;
-      }
-
-      const newFiles = acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        }),
-      );
-
-      setFiles(newFiles);
-    },
-    accept: {
-      // Documents that are allowed
-      "application/pdf": [".pdf"],
-      "application/msword": [".doc"],
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        [".docx"],
-      "text/markdown": [".md"],
-    },
+    onDrop: onDrop,
+    accept: acceptedFiletypes,
     maxSize: 20 * 1024 * 1024, // 20MB
   });
 
