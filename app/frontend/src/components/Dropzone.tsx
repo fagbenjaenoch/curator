@@ -39,13 +39,15 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     }
 
     const formData = new FormData();
-    files.forEach((file) => formData.append(file.name, file));
+    files.forEach((file) => formData.append("files", file));
 
     try {
       const response = await fetch("https://localhost:3000/api/v1", {
+        method: "POST",
         body: formData,
       });
       const data = await response.json();
+      console.log(data);
     } catch (error) {
       console.error(error);
     }
