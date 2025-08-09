@@ -23,17 +23,17 @@ func main() {
 
 	go func() {
 		log.Printf("Server running on port %s", cfg.Port)
-		if err:= srv.ListenAndServe(); err != nil &&  err.Error() != "http: Server Closed" {
+		if err := srv.ListenAndServe(); err != nil && err.Error() != "http: Server Closed" {
 			log.Fatalf("Couldn't start server: %v", err)
 		}
 	}()
 
-	<- ctx.Done()
+	<-ctx.Done()
 	log.Println("Received shutdown signal")
 
-	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	
+
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Fatalf("Server forced shutdown: %v", err)
 	}
@@ -46,18 +46,18 @@ func New(cfg *config.Config) *http.Server {
 	r := chi.NewRouter()
 
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins: []string{cfg.AllowedOrigins},
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type"},
+		AllowedOrigins:   []string{cfg.AllowedOrigins},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
 		AllowCredentials: true,
-		MaxAge: 300,
+		MaxAge:           300,
 	}))
 
 	return &http.Server{
-		Addr: ":" + cfg.Port,
-		Handler: r,
-		ReadTimeout: 10 * time.Second,
+		Addr:         ":" + cfg.Port,
+		Handler:      r,
+		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 15 * time.Second,
-		IdleTimeout: 60 * time.Second,
+		IdleTimeout:  60 * time.Second,
 	}
 }
