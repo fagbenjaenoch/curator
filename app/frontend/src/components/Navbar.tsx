@@ -6,7 +6,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex justify-between">
         <span className="text-lg">Curator.</span>
         <div className="flex gap-2">
-          <Button className="cursor-pointer">Get started for free</Button>
+          <Button className="cursor-pointer">Contribute to the project</Button>
         </div>
       </div>
     </div>
