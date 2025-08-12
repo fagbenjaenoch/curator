@@ -1,12 +1,8 @@
-package main
+package api
 
 import (
-	"context"
-	"fmt"
+	"encoding/json"
 	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/fagbenjaenoch/curator/app/backend/config"
@@ -16,33 +12,8 @@ import (
 	otelChi "github.com/riandyrn/otelchi"
 )
 
-func main() {
-	cfg := config.Load()
-	srv := New(cfg)
-	logger := config.Logger()
-
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
-
-	go func() {
-		logger.Info().Msg(fmt.Sprintf("Server running on port %s", cfg.Port))
-		if err := srv.ListenAndServe(); err != nil && err.Error() != "http: Server closed" {
-			logger.Error().Msg(fmt.Sprintf("Couldn't start server: %v", err))
-		}
-	}()
-
-	<-ctx.Done()
-	logger.Warn().Msg("Received shutdown signal")
-
-	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	if err := srv.Shutdown(shutdownCtx); err != nil {
-		logger.Fatal().Msg(fmt.Sprintf("Server forced shutdown: %v", err))
-	}
-
-	logger.Info().Msg("Server exited gracefully")
-	os.Exit(0)
+type Response struct {
+	Message string `json:"message"`
 }
 
 func New(cfg *config.Config) *http.Server {
@@ -58,6 +29,13 @@ func New(cfg *config.Config) *http.Server {
 	}))
 	r.Use(otelChi.Middleware(cfg.ServiceName))
 	r.Use(middleware.LoggingMiddleware(logger))
+
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		response := Response{
+			Message: "Hello world",
+		}
+		json.NewEncoder(w).Encode(response)
+	})
 
 	return &http.Server{
 		Addr:         ":" + cfg.Port,

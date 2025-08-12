@@ -28,7 +28,10 @@ export default function Landing() {
       <footer>
         <div className="max-w-7xl mx-auto px-8 py-8">
           <div className="flex justify-between">
-            <small>Built with a step out of comfort</small>
+            <div>
+              <small>Built with a step out of comfort</small>
+              <span>Available for hire</span>
+            </div>
             <div className="space-x-4 text-xs">
               <a
                 href="http://github.com/fagbenjaenoch"
