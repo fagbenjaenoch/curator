@@ -74,24 +74,6 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     maxSize: 20 * 1024 * 1024, // 20MB
   });
 
-  const removeFile = (file: File) => {
-    const newFiles = files.filter((f) => f !== file);
-    setFiles(newFiles);
-  };
-
-  const computeFileSize = (file: File) => {
-    switch (true) {
-      case file.size < 1024: // Less than 1KB
-        return `${file.size.toFixed(2)} B`;
-      case file.size < 1024 * 1024: // Less than 1MB
-        return `${(file.size / 1024).toFixed(2)} KB`;
-      case file.size < 1024 * 1024 * 1024: // Less than 1GB
-        return `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
-      default:
-        return `${(file.size / 1024).toFixed(2)} KB`;
-    }
-  };
-
   const renderDropZone = () => {
     return (
       <div
@@ -120,57 +102,78 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     );
   };
 
-  const renderFileList = () => {
-    return (
-      <div className="space-y-4">
-        <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-2">
-          {files.map((file, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow"
-            >
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center p-5">
-                  <span className="text-xs font-medium">
-                    {file.name.split(".").pop()?.toUpperCase()}
-                  </span>
-                </div>
+  return files.length === 0 ? (
+    renderDropZone()
+  ) : (
+    <div className="space-y-4">
+      <FileList files={files} setFiles={setFiles} />
+      <Button
+        onClick={() => handleUpload(files)}
+        className="cursor-pointer"
+        disabled={isUploading}
+      >
+        {isUploading && <Loader className="animate-spin" />}
+        {isUploading ? "Uploading" : "Upload"}
+      </Button>
+      {uploadError && (
+        <p className="text-xs text-red-500 mt-2">{uploadError}</p>
+      )}
+    </div>
+  );
+}
 
-                <div className="flex flex-col items-start space-y-1">
-                  <p className="text-sm font-medium truncate max-w-xs">
-                    {file.name}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {computeFileSize(file)}
-                  </p>
-                </div>
-              </div>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => removeFile(file)}
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
-            </div>
-          ))}
-        </div>
-
-        <Button
-          onClick={() => handleUpload(files)}
-          className="cursor-pointer"
-          disabled={isUploading}
-        >
-          {isUploading && <Loader className="animate-spin" />}
-          {isUploading ? "Uploading" : "Upload"}
-        </Button>
-        {uploadError && (
-          <p className="text-xs text-red-500 mt-2">{uploadError}</p>
-        )}
-      </div>
-    );
+function FileList({
+  files,
+  setFiles,
+}: {
+  files: File[];
+  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+}) {
+  const removeFile = (file: File) => {
+    const newFiles = files.filter((f) => f !== file);
+    setFiles(newFiles);
   };
 
-  return files.length === 0 ? renderDropZone() : renderFileList();
+  const computeFileSize = (file: File) => {
+    switch (true) {
+      case file.size < 1024: // Less than 1KB
+        return `${file.size.toFixed(2)} B`;
+      case file.size < 1024 * 1024: // Less than 1MB
+        return `${(file.size / 1024).toFixed(2)} KB`;
+      case file.size < 1024 * 1024 * 1024: // Less than 1GB
+        return `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+      default:
+        return `${(file.size / 1024).toFixed(2)} KB`;
+    }
+  };
+
+  return (
+    <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-2">
+      {files.map((file, index) => (
+        <div
+          key={index}
+          className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow"
+        >
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center p-5">
+              <span className="text-xs font-medium">
+                {file.name.split(".").pop()?.toUpperCase()}
+              </span>
+            </div>
+
+            <div className="flex flex-col items-start space-y-1">
+              <p className="text-sm font-medium truncate max-w-xs">
+                {file.name}
+              </p>
+              <p className="text-xs text-gray-500">{computeFileSize(file)}</p>
+            </div>
+          </div>
+
+          <Button variant="ghost" size="sm" onClick={() => removeFile(file)}>
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        </div>
+      ))}
+    </div>
+  );
 }
