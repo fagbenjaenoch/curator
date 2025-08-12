@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
-	"go.opentelemetry.io/otel/trace"
 )
 
 type loggingResponseWriter struct {
@@ -23,16 +22,16 @@ func LoggingMiddleware(logger zerolog.Logger) func(http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			start := time.Now()
 
-			spanCtx := trace.SpanContextFromContext(r.Context())
-			traceID := spanCtx.TraceID().String()
-			spanID := spanCtx.SpanID().String()
+			// spanCtx := trace.SpanContextFromContext(r.Context())
+			// traceID := spanCtx.TraceID().String()
+			// spanID := spanCtx.SpanID().String()
 
 			lrw := &loggingResponseWriter{ResponseWriter: w, statusCode: http.StatusOK}
 			next.ServeHTTP(lrw, r)
 
 			logger.Info().
-				Str("trace_id", traceID).
-				Str("span_id", spanID).
+				// Str("trace_id", traceID).
+				// Str("span_id", spanID).
 				Str("method", r.Method).
 				Str("url", r.URL.String()).
 				Str("remote_ip", r.RemoteAddr).

@@ -8,8 +8,8 @@ import (
 	"github.com/fagbenjaenoch/curator/app/backend/config"
 	"github.com/fagbenjaenoch/curator/app/backend/middleware"
 	"github.com/go-chi/chi"
+	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	otelChi "github.com/riandyrn/otelchi"
 )
 
 type Response struct {
@@ -27,8 +27,10 @@ func New(cfg *config.Config) *http.Server {
 		AllowCredentials: true,
 		MaxAge:           300,
 	}))
-	r.Use(otelChi.Middleware(cfg.ServiceName))
+	// TODO: Implement Observability
+	// r.Use(otelChi.Middleware(cfg.ServiceName))
 	r.Use(middleware.LoggingMiddleware(logger))
+	r.Use(chiMiddleware.Recoverer)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		response := Response{
