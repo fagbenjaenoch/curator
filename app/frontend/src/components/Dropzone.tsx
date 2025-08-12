@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
-import { Trash2, UploadIcon } from "lucide-react";
+import { Loader, Trash2, UploadIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -9,6 +9,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const [files, setFiles] = useState<File[]>([]);
   const [internalError, setInternalError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   let totalFileSize = 0;
   files.forEach((file) => (totalFileSize = totalFileSize + file.size));
 
@@ -28,6 +29,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   }, []);
 
   const handleUpload = async (files: File[]) => {
+    setIsUploading(true);
     if (files.length === 0) {
       return;
     }
@@ -50,6 +52,8 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
       console.log(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -153,8 +157,13 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
           ))}
         </div>
 
-        <Button onClick={() => handleUpload(files)} className="cursor-pointer">
-          Upload
+        <Button
+          onClick={() => handleUpload(files)}
+          className="cursor-pointer"
+          disabled={isUploading}
+        >
+          {isUploading && <Loader className="animate-spin" />}
+          {isUploading ? "Uploading" : "Upload"}
         </Button>
         {uploadError && (
           <p className="text-xs text-red-500 mt-2">{uploadError}</p>
