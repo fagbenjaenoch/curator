@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import ovalMarker from "@/assets/oval marker.svg";
 import Dropzone from "@/components/Dropzone";
+import Footer from "@/components/Footer";
 export default function Landing() {
   return (
     <div>
@@ -22,6 +23,7 @@ export default function Landing() {
           <Dropzone />
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

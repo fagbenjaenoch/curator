@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="flex justify-between">
           <div className="space-y-2">
             <small className="block">Built with a step out of comfort</small>
-            <p className="text-xs text-green-500 bg-green-100 border-2 border-green-500 w-max p-1 px-2 rounded-full inline-flex items-center gap-1">
+            <p className="text-xs text-green-500 bg-green-100 border-1 border-green-500 w-max p-1 px-2 rounded-full inline-flex items-center gap-1">
               <StatusIndicator />
               <span>Available for hire</span>
             </p>
