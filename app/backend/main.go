@@ -9,7 +9,7 @@ import (
 	"time"
 
 	server "github.com/fagbenjaenoch/curator/app/backend/cmd/api"
-	"github.com/fagbenjaenoch/curator/app/backend/config"
+	"github.com/fagbenjaenoch/curator/app/backend/internal/config"
 )
 
 func main() {

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/fagbenjaenoch/curator/app/backend/config"
-	"github.com/fagbenjaenoch/curator/app/backend/middleware"
+	"github.com/fagbenjaenoch/curator/app/backend/internal/config"
+	"github.com/fagbenjaenoch/curator/app/backend/internal/middleware"
 	"github.com/go-chi/chi"
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
