@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"time"
 
-	server "github.com/fagbenjaenoch/curator/app/backend/cmd/api"
+	server "github.com/fagbenjaenoch/curator/app/backend/internal"
 	"github.com/fagbenjaenoch/curator/app/backend/internal/config"
 )
 
