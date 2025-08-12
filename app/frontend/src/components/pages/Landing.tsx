@@ -3,6 +3,7 @@ import ovalMarker from "@/assets/oval marker.svg";
 import Dropzone from "@/components/Dropzone";
 import Github from "@/components/ui/Github";
 import X from "@/components/ui/X";
+import StatusIndicator from "@/components/StatusIndicator";
 
 export default function Landing() {
   return (
@@ -28,9 +29,12 @@ export default function Landing() {
       <footer>
         <div className="max-w-7xl mx-auto px-8 py-8">
           <div className="flex justify-between">
-            <div>
-              <small>Built with a step out of comfort</small>
-              <span>Available for hire</span>
+            <div className="space-y-2">
+              <small className="block">Built with a step out of comfort</small>
+              <p className="text-xs text-green-500 bg-green-100 border-2 border-green-500 w-max p-1 px-2 rounded-full inline-flex items-center gap-1">
+                <StatusIndicator />
+                <span>Available for hire</span>
+              </p>
             </div>
             <div className="space-x-4 text-xs">
               <a
