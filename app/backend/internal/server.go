@@ -34,10 +34,9 @@ func New(cfg *config.Config) *http.Server {
 	r.Use(chiMiddleware.Recoverer)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		response := Response{
+		json.NewEncoder(w).Encode(Response{
 			Message: "Hello world",
-		}
-		json.NewEncoder(w).Encode(response)
+		})
 	})
 
 	r.Mount(cfg.BaseRoute, routes.RegisterApiRoues())
