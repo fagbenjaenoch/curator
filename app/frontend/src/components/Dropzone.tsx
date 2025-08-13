@@ -154,7 +154,7 @@ function FileList({
           key={index}
           className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow"
         >
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center p-5">
               <span className="text-xs font-medium">
                 {file.name.split(".").pop()?.toUpperCase()}
@@ -162,7 +162,7 @@ function FileList({
             </div>
 
             <div className="flex flex-col items-start space-y-1">
-              <p className="text-sm font-medium truncate max-w-xs">
+              <p className="text-sm font-medium truncate max-w-[15rem] sm:max-w-xs">
                 {file.name}
               </p>
               <p className="text-xs text-gray-500">{computeFileSize(file)}</p>
