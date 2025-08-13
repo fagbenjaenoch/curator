@@ -10,6 +10,7 @@ type Config struct {
 	Port           string
 	AllowedOrigins string
 	ServiceName    string
+	BaseRoute      string
 }
 
 func Load() *Config {
@@ -19,6 +20,7 @@ func Load() *Config {
 		Port:           getEnv("PORT", "3000"),
 		AllowedOrigins: getEnv("ALLOWED_ORIGINS", "*"),
 		ServiceName:    getEnv("SERVICE_NAME", "curator-backend"),
+		BaseRoute:      "/api/v1/",
 	}
 
 	return cfg
