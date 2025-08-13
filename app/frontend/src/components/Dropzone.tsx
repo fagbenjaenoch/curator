@@ -44,7 +44,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     files.forEach((file) => formData.append("files", file));
 
     try {
-      const response = await fetch("https://localhost:3000/api/v1", {
+      const response = await fetch("http://localhost:3000/api/v1/upload", {
         method: "POST",
         body: formData,
       });
