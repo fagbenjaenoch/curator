@@ -1,4 +1,4 @@
-package config
+package utils
 
 import (
 	"os"
@@ -13,7 +13,7 @@ type Config struct {
 	BaseRoute      string
 }
 
-func Load() *Config {
+func LoadConfig() *Config {
 	_ = godotenv.Load()
 
 	cfg := &Config{

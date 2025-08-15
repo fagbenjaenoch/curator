@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/fagbenjaenoch/curator/app/backend/internal/config"
 	"github.com/fagbenjaenoch/curator/app/backend/internal/middleware"
 	"github.com/fagbenjaenoch/curator/app/backend/internal/routes"
+	"github.com/fagbenjaenoch/curator/app/backend/internal/utils"
 	"github.com/go-chi/chi"
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
@@ -17,9 +17,9 @@ type Response struct {
 	Message string `json:"message"`
 }
 
-func New(cfg *config.Config) *http.Server {
+func New(cfg *utils.Config) *http.Server {
 	r := chi.NewRouter()
-	logger := config.NewLogger(cfg.ServiceName, true)
+	logger := utils.NewLogger(cfg.ServiceName, false)
 
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{cfg.AllowedOrigins},
@@ -28,6 +28,7 @@ func New(cfg *config.Config) *http.Server {
 		AllowCredentials: true,
 		MaxAge:           300,
 	}))
+
 	// TODO: Implement Observability
 	// r.Use(otelChi.Middleware(cfg.ServiceName))
 	r.Use(middleware.LoggingMiddleware(logger))
