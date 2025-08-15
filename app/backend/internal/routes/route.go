@@ -11,7 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-const MAX_UPLOAD_SIZE int64 = 20 * 1024 * 1024
+const MAX_UPLOAD_SIZE int64 = 5 * 1024 * 1024
 
 func RegisterApiRoues() chi.Router {
 	r := chi.NewRouter()
@@ -45,6 +45,10 @@ func RegisterApiRoues() chi.Router {
 			uploadService.ParsePDF(file)
 
 			fileType, _ := utils.DetectFileType(file)
+			if _, ok := utils.AllowedTypes[fileType]; !ok {
+				log.Err(fmt.Errorf("%s is not supported", fileType)).Msg("could not parse file")
+				return
+			}
 			log.Debug().Msg(fileType)
 		}
 		// for _, fileHeader := range files {

@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-var allowedTypes = map[string]bool{
+var AllowedTypes = map[string]bool{
 	"application/pdf":    true,
 	"application/msword": true,
 	"application/vnd.openxmlformats-officedocument.wordprocessingml.document": true,
