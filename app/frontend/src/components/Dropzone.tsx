@@ -5,7 +5,7 @@ import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
-  const FILE_THRESHOLD = 20 * 1024 * 1024; // 20MB
+  const FILE_THRESHOLD = 5 * 1024 * 1024; // 5MB
   const [files, setFiles] = useState<File[]>([]);
   const [internalError, setInternalError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
