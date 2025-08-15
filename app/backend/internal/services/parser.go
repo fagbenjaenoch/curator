@@ -1,4 +1,4 @@
-package services
+package service
 
 import (
 	"mime/multipart"
@@ -7,9 +7,9 @@ import (
 )
 
 type DocumentParser interface {
-	ParsePDF(file *multipart.FileHeader) error
-	ParseDOCX(file *multipart.FileHeader) error
-	ParseMarkdown(file *multipart.FileHeader) error
+	ParsePDF(file multipart.File) error
+	ParseDOCX(file multipart.File) error
+	ParseMarkdown(file multipart.File) error
 }
 
 type ParserService struct{}
@@ -18,17 +18,17 @@ func NewParser() *ParserService {
 	return &ParserService{}
 }
 
-func (ps *ParserService) ParsePDF(file *multipart.FileHeader) error {
+func (ps *ParserService) ParsePDF(file multipart.File) error {
 	log.Info().Msg("ParsePDF was called")
 	return nil
 }
 
-func (ps *ParserService) ParseDOCX(file *multipart.FileHeader) error {
+func (ps *ParserService) ParseDOCX(file multipart.File) error {
 	log.Info().Msg("ParseDOCX was called")
 	return nil
 }
 
-func (ps *ParserService) ParseMarkdown(file *multipart.FileHeader) error {
+func (ps *ParserService) ParseMarkdown(file multipart.File) error {
 	log.Info().Msg("ParseMarkdown was called")
 	return nil
 }
