@@ -35,59 +35,51 @@ func RegisterApiRoues() chi.Router {
 
 		files := r.MultipartForm.File["files"]
 
-		uploadService := service.NewParser()
+		var parserService service.DocumentParser = service.NewParser()
 
 		for _, fileHeader := range files {
 			file, err := fileHeader.Open()
 			if err != nil {
 				log.Error().Msg(fmt.Sprintf("Could not open file header: %s", err))
 			}
-			uploadService.ParsePDF(file)
 
-			fileType, _ := utils.DetectFileType(file)
+			fileType, _ := utils.DetectMimePDFDocDocx(file)
 			if _, ok := utils.AllowedTypes[fileType]; !ok {
-				log.Err(fmt.Errorf("%s is not supported", fileType)).Msg("could not parse file")
+				errMsg := "could not parse file"
+				log.Fatal().Err(fmt.Errorf("%s is not supported", fileType))
+
+				w.WriteHeader(http.StatusUnsupportedMediaType)
+				json.NewEncoder(w).Encode(struct {
+					Message string `json:"message"`
+					Success bool   `json:"success"`
+				}{
+					Message: errMsg,
+					Success: false,
+				})
 				return
 			}
-			log.Debug().Msg(fileType)
+
+			var (
+				parsedDocument string
+				parsingError   error
+			)
+			switch fileType {
+			case utils.PDFType:
+				parsedDocument, parsingError = parserService.ParsePDF(file)
+			case utils.DocType:
+				parsedDocument, parsingError = parserService.ParseDOCX(file)
+			case utils.DocType:
+				parsedDocument, parsingError = parserService.ParseDoc(file)
+			}
+
+			if parsingError != nil {
+				return
+			}
+
+			fmt.Println(parsedDocument)
+
+			log.Info().Msg("parsed document successfully")
 		}
-		// for _, fileHeader := range files {
-		// 	file, err := fileHeader.Open()
-		// 	if err != nil {
-		// 		http.Error(w, "could not open file", http.StatusBadRequest)
-		// 		return
-		// 	}
-		// 	defer file.Close()
-
-		// 	buff := make([]byte, 512)
-		// 	_, err = file.Read(buff)
-		// 	if err != nil {
-		// 		http.Error(w, err.Error(), http.StatusBadRequest)
-		// 		return
-		// 	}
-
-		// 	r, err := pdf.NewReader(bytes.NewReader(buff), int64(len(buff)))
-		// 	if err != nil {
-		// 		// logger.Fatal().Msg(fmt.Sprintf("failed to read pdf: %v", err))
-		// 	}
-
-		// 	// Loop through pages and print text
-		// 	numPages := r.NumPage()
-		// 	for i := 1; i <= numPages; i++ {
-		// 		page := r.Page(i)
-		// 		if page.V.IsNull() {
-		// 			continue
-		// 		}
-
-		// 		content := page.Content()
-		// 		text := ""
-		// 		for _, t := range content.Text {
-		// 			text += t.S
-		// 		}
-
-		// 		fmt.Printf("Page %d:\n%s\n", i, text)
-		// 	}
-		// }
 
 		json.NewEncoder(w).Encode(struct {
 			Message string `json:"message"`

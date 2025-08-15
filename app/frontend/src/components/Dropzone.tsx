@@ -65,7 +65,6 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
       ".docx",
     ],
-    "text/markdown": [".md"],
   };
 
   // Setup Dropzone

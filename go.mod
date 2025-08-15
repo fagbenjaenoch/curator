@@ -3,6 +3,7 @@ module github.com/fagbenjaenoch/curator
 go 1.24.5
 
 require (
+	baliance.com/gooxml v1.0.1
 	github.com/go-chi/chi v1.5.5
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-chi/cors v1.2.2
