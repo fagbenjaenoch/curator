@@ -1,12 +1,10 @@
 package service
 
 import (
+	"fmt"
 	"mime/multipart"
-	"strings"
 
-	"baliance.com/gooxml/document"
-	"github.com/rs/zerolog/log"
-	"rsc.io/pdf"
+	"github.com/fagbenjaenoch/curator/app/backend/internal/utils"
 )
 
 type DocumentParser interface {
@@ -15,62 +13,48 @@ type DocumentParser interface {
 	ParseDoc(file multipart.File) (string, error)
 }
 
-type ParserService struct{}
-
-func NewParser() *ParserService {
-	return &ParserService{}
+type ParserService struct {
+	parser DocumentParser
 }
 
-func (ps *ParserService) ParsePDF(file multipart.File) (string, error) {
-	log.Info().Msg("ParsePDF was called")
-	r, err := pdf.NewReader(file, fileSize(file))
-	if err != nil {
-		return "", err
+func NewParsingService(dp DocumentParser) *ParserService {
+	return &ParserService{
+		parser: dp,
 	}
+}
 
-	var allText strings.Builder
-	numPages := r.NumPage()
-	for i := 1; i <= numPages; i++ {
-		p := r.Page(i)
-		content := p.Content()
-		for _, txt := range content.Text {
-			allText.WriteString(txt.S)
-			allText.WriteString(" ")
+func (ps *ParserService) Parse(files []*multipart.FileHeader) (string, error) {
+	var result string
+	for _, fileHeader := range files {
+		file, err := fileHeader.Open()
+		if err != nil {
+			return "", err
 		}
-		allText.WriteString("\n\n")
-	}
-	return allText.String(), nil
-}
 
-func (ps *ParserService) ParseDOCX(file multipart.File) (string, error) {
-	log.Info().Msg("ParseDOCX was called")
-	doc, err := document.Read(file, int64(fileSize(file)))
-	if err != nil {
-		return "", err
-	}
-
-	var sb strings.Builder
-	for _, para := range doc.Paragraphs() {
-		for _, run := range para.Runs() {
-			sb.WriteString(run.Text())
+		fileType, _ := utils.DetectMimePDFDocDocx(file)
+		if _, ok := utils.AllowedTypes[fileType]; !ok {
+			return "", fmt.Errorf("%s is not supported", fileType)
 		}
-		sb.WriteString("\n")
-	}
-	return sb.String(), nil
-}
 
-func (ps *ParserService) ParseDoc(file multipart.File) (string, error) {
-	log.Info().Msg("ParseMarkdown was called")
-	return "", nil
-}
+		var (
+			parsedDocument string
+			parsingError   error
+		)
 
-func fileSize(file multipart.File) int64 {
-	if seeker, ok := file.(interface {
-		Seek(int64, int) (int64, error)
-	}); ok {
-		pos, _ := seeker.Seek(0, 2) // go to end
-		seeker.Seek(0, 0)           // back to start
-		return pos
+		switch fileType {
+		case utils.PDFType:
+			parsedDocument, parsingError = ps.parser.ParsePDF(file)
+		case utils.DocType:
+			parsedDocument, parsingError = ps.parser.ParseDOCX(file)
+		case utils.DocType:
+			parsedDocument, parsingError = ps.parser.ParseDoc(file)
+		}
+
+		if parsingError != nil {
+			return "", parsingError
+		}
+
+		result += parsedDocument
 	}
-	return 0
+	return result, nil
 }
