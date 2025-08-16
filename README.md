@@ -7,4 +7,4 @@ It's still a work in progress at the moment, the Readme will be updated very soo
 
 ## License
 
-[MIT License](LICENSE)
+Licensed under [MIT License](LICENSE)
