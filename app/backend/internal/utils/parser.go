@@ -6,7 +6,6 @@ import (
 
 	"baliance.com/gooxml/document"
 	"github.com/rs/zerolog/log"
-
 	"rsc.io/pdf"
 )
 
@@ -55,7 +54,7 @@ func (ps ParserService) ParseDOCX(file multipart.File) (string, error) {
 }
 
 func (ps ParserService) ParseDoc(file multipart.File) (string, error) {
-	log.Info().Msg("ParseMarkdown was called")
+	log.Info().Msg("ParseDoc was called")
 	return "", nil
 }
 

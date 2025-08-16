@@ -32,6 +32,7 @@ func (ps *ParserService) Parse(files []*multipart.FileHeader) (string, error) {
 		}
 
 		fileType, _ := utils.DetectMimePDFDocDocx(file)
+		fmt.Println(fileType)
 		if _, ok := utils.AllowedTypes[fileType]; !ok {
 			return "", fmt.Errorf("%s is not supported", fileType)
 		}
@@ -44,7 +45,7 @@ func (ps *ParserService) Parse(files []*multipart.FileHeader) (string, error) {
 		switch fileType {
 		case utils.PDFType:
 			parsedDocument, parsingError = ps.parser.ParsePDF(file)
-		case utils.DocType:
+		case utils.DocxType:
 			parsedDocument, parsingError = ps.parser.ParseDOCX(file)
 		case utils.DocType:
 			parsedDocument, parsingError = ps.parser.ParseDoc(file)
@@ -56,5 +57,6 @@ func (ps *ParserService) Parse(files []*multipart.FileHeader) (string, error) {
 
 		result += parsedDocument
 	}
+	utils.RankText(result)
 	return result, nil
 }
