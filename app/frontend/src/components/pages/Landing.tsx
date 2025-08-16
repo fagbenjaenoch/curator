@@ -1,11 +1,9 @@
-import Navbar from "@/components/Navbar";
 import ovalMarker from "@/assets/oval marker.svg";
 import Dropzone from "@/components/Dropzone";
-import Footer from "@/components/Footer";
+import Layout from "../Layout";
 export default function Landing() {
   return (
-    <div>
-      <Navbar />
+    <Layout>
       <section className="mt-[100px] px-4 max-w-7xl mx-auto text-center">
         <h1>
           Need help with your document?
@@ -23,7 +21,6 @@ export default function Landing() {
           <Dropzone />
         </div>
       </section>
-      <Footer />
-    </div>
+    </Layout>
   );
 }

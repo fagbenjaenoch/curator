@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router";
-import Home from "@/components/pages/Home";
+import Result from "@/components/pages/Result";
 import Landing from "@/components/pages/Landing";
 
 const queryClient = new QueryClient();
@@ -11,7 +11,7 @@ export default function Root(): React.ReactNode {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/app" element={<Home />} />
+          <Route path="/result" element={<Result />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
