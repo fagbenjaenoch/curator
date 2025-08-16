@@ -10,6 +10,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const [internalError, setInternalError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [data, setData] = useState(null);
   let totalFileSize = 0;
   files.forEach((file) => (totalFileSize = totalFileSize + file.size));
 
@@ -49,8 +50,8 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
         method: "POST",
         body: formData,
       });
-      const data = await response.json();
-      console.log(data);
+      const result = await response.json();
+      setData(result.data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -102,22 +103,31 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     );
   };
 
-  return files.length === 0 ? (
-    renderDropZone()
-  ) : (
+  if (!data) {
+    return files.length === 0 ? (
+      renderDropZone()
+    ) : (
+      <div className="space-y-4">
+        <FileList files={files} setFiles={setFiles} />
+        <Button
+          onClick={() => handleUpload(files)}
+          className="cursor-pointer"
+          disabled={isUploading}
+        >
+          {isUploading && <Loader className="animate-spin" />}
+          {isUploading ? "Uploading" : "Upload"}
+        </Button>
+        {uploadError && (
+          <p className="text-xs text-red-500 mt-2">{uploadError}</p>
+        )}
+      </div>
+    );
+  }
+
+  return (
     <div className="space-y-4">
-      <FileList files={files} setFiles={setFiles} />
-      <Button
-        onClick={() => handleUpload(files)}
-        className="cursor-pointer"
-        disabled={isUploading}
-      >
-        {isUploading && <Loader className="animate-spin" />}
-        {isUploading ? "Uploading" : "Upload"}
-      </Button>
-      {uploadError && (
-        <p className="text-xs text-red-500 mt-2">{uploadError}</p>
-      )}
+      <p>{data}</p>
+      <Button onClick={() => setData(null)}>Clear</Button>
     </div>
   );
 }
