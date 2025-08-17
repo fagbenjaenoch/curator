@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	service "github.com/fagbenjaenoch/curator/app/backend/internal/services"
-	"github.com/fagbenjaenoch/curator/app/backend/internal/utils"
 	"github.com/go-chi/chi"
 	"github.com/rs/zerolog/log"
 )
@@ -33,7 +32,7 @@ func RegisterApiRoues() chi.Router {
 			return
 		}
 
-		documentParser := utils.NewParser()
+		documentParser := service.NewParser()
 		parsingService := service.NewParsingService(documentParser)
 
 		files := r.MultipartForm.File["files"]
