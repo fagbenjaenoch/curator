@@ -24,7 +24,7 @@ func RankText(rawText string) (string, error) {
 	rankedPhrases := textrank.FindPhrases(tr)
 
 	for _, phrase := range rankedPhrases {
-		fmt.Println(phrase)
+		fmt.Println(phrase.Right)
 	}
 
 	return "", nil
