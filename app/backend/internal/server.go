@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/fagbenjaenoch/curator/app/backend/internal/handler"
 	"github.com/fagbenjaenoch/curator/app/backend/internal/middleware"
-	"github.com/fagbenjaenoch/curator/app/backend/internal/routes"
 	"github.com/fagbenjaenoch/curator/app/backend/internal/utils"
 	"github.com/go-chi/chi"
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
@@ -40,7 +40,7 @@ func New(cfg *utils.Config) *http.Server {
 		})
 	})
 
-	r.Mount(cfg.BaseRoute, routes.RegisterApiRoues())
+	r.Mount(cfg.BaseRoute, handler.RegisterApiRoues())
 
 	return &http.Server{
 		Addr:         ":" + cfg.Port,

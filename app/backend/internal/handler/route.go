@@ -1,4 +1,4 @@
-package routes
+package handler
 
 import (
 	"encoding/json"
@@ -48,6 +48,7 @@ func RegisterApiRoues() chi.Router {
 				Message: errMsg,
 				Success: false,
 			})
+			return
 		}
 		log.Info().Msg("parsed document successfully")
 
