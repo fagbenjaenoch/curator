@@ -64,6 +64,6 @@ func DetectMimePDFDocDocx(file multipart.File) (string, error) {
 	return mimeType, nil // fallback
 }
 
-func buildJsonSuccessResponse(rw http.ResponseWriter, sc int, body interface{}) {}
-func buildJsonErrorResponse(rw http.ResponseWriter, sc int, body interface{})   {}
-func writeJson(rw http.ResponseWriter, body interface{})                        {}
+func buildJsonSuccessResponse(rw http.ResponseWriter, sc int, body any) {}
+func buildJsonErrorResponse(rw http.ResponseWriter, sc int, body any)   {}
+func writeJson(rw http.ResponseWriter, body any)                        {}
