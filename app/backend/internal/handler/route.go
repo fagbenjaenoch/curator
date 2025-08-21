@@ -38,7 +38,7 @@ func RegisterApiRoues() chi.Router {
 		result, err := parsingService.Parse(files)
 		if err != nil {
 			errMsg := "could not parse file"
-			log.Fatal().Err(fmt.Errorf("%s: %s", errMsg, err))
+			log.Error().Err(fmt.Errorf("%s: %s", errMsg, err)).Msg("")
 
 			res := utils.BuildErrorResponse(errMsg, err)
 			utils.WriteJson(w, http.StatusInternalServerError, res)
