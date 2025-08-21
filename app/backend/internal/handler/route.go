@@ -42,6 +42,7 @@ func RegisterApiRoues() chi.Router {
 
 			res := utils.BuildErrorResponse(errMsg, err)
 			utils.WriteJson(w, http.StatusInternalServerError, res)
+			return
 		}
 		log.Info().Msg("parsed document successfully")
 
