@@ -3,6 +3,7 @@ package utils
 import (
 	"archive/zip"
 	"bytes"
+	"encoding/json"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -64,6 +65,40 @@ func DetectMimePDFDocDocx(file multipart.File) (string, error) {
 	return mimeType, nil // fallback
 }
 
-func buildJsonSuccessResponse(rw http.ResponseWriter, sc int, body any) {}
-func buildJsonErrorResponse(rw http.ResponseWriter, sc int, body any)   {}
-func writeJson(rw http.ResponseWriter, body any)                        {}
+type Response struct {
+	Message string `json:"message"`
+	Status  int    `json:"code"`
+	Payload any    `json:"payload"`
+	Error   error  `json:"error"`
+}
+
+// returns success response struct
+func BuildSuccessResponse(m string, s int, body any) Response {
+	return Response{
+		Message: m,
+		Status:  s,
+		Payload: body,
+		Error:   nil,
+	}
+}
+
+// returns error response struct
+func BuildErrorResponse(m string, s int, err error) Response {
+	return Response{
+		Message: m,
+		Status:  s,
+		Payload: nil,
+		Error:   err,
+	}
+}
+
+// sends response to client
+func WriteJson(w http.ResponseWriter, status int, payload any) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+
+	err := json.NewEncoder(w).Encode(payload)
+	if err != nil {
+		http.Error(w, `{"error": "failed to encode response"}`, http.StatusInternalServerError)
+	}
+}
