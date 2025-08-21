@@ -67,7 +67,7 @@ func DetectMimePDFDocDocx(file multipart.File) (string, error) {
 
 type Response struct {
 	Message string `json:"message"`
-	Status  int    `json:"code"`
+	Status  string `json:"status"`
 	Payload any    `json:"payload"`
 	Error   error  `json:"error"`
 }
@@ -76,7 +76,7 @@ type Response struct {
 func BuildSuccessResponse(m string, s int, body any) Response {
 	return Response{
 		Message: m,
-		Status:  s,
+		Status:  "success",
 		Payload: body,
 		Error:   nil,
 	}
@@ -86,7 +86,7 @@ func BuildSuccessResponse(m string, s int, body any) Response {
 func BuildErrorResponse(m string, s int, err error) Response {
 	return Response{
 		Message: m,
-		Status:  s,
+		Status:  "failure",
 		Payload: nil,
 		Error:   err,
 	}
