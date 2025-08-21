@@ -23,6 +23,10 @@ func RankText(rawText string) (string, error) {
 
 	rankedPhrases := textrank.FindPhrases(tr)
 
+	sentences := textrank.FindSentencesByRelationWeight(tr, 5)
+
+	log.Debug().Msg(fmt.Sprintf("Ranked sentences: %v", sentences))
+
 	for _, phrase := range rankedPhrases {
 		fmt.Println(phrase.Right)
 	}

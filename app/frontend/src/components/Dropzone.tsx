@@ -37,7 +37,9 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
 
     setUploadError("");
     if (totalFileSize > FILE_THRESHOLD) {
-      setUploadError("Files are more than 20MB");
+      setUploadError(
+        `Files are more than ${(FILE_THRESHOLD / (1024 * 1024)).toFixed(2)}MB`,
+      );
       setIsUploading(false);
       return;
     }
