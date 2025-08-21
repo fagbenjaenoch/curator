@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	service "github.com/fagbenjaenoch/curator/app/backend/internal/services"
+	"github.com/fagbenjaenoch/curator/app/backend/internal/utils"
 	"github.com/go-chi/chi"
 	"github.com/rs/zerolog/log"
 )
@@ -40,27 +41,14 @@ func RegisterApiRoues() chi.Router {
 		if err != nil {
 			errMsg := "could not parse file"
 			log.Fatal().Err(fmt.Errorf("%s: %s", errMsg, err))
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(struct {
-				Message string `json:"message"`
-				Success bool   `json:"success"`
-			}{
-				Message: errMsg,
-				Success: false,
-			})
-			return
+
+			res := utils.BuildErrorResponse(errMsg, err)
+			utils.WriteJson(w, http.StatusInternalServerError, res)
 		}
 		log.Info().Msg("parsed document successfully")
 
-		json.NewEncoder(w).Encode(struct {
-			Message string `json:"message"`
-			Success bool   `json:"success"`
-			Data    string `json:"data"`
-		}{
-			Message: "file parsed successfully",
-			Success: true,
-			Data:    result,
-		})
+		res := utils.BuildSuccessResponse("file parsed successfully", result)
+		utils.WriteJson(w, http.StatusOK, res)
 	})
 
 	return r

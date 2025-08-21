@@ -73,7 +73,7 @@ type Response struct {
 }
 
 // returns success response struct
-func BuildSuccessResponse(m string, s int, body any) Response {
+func BuildSuccessResponse(m string, body any) Response {
 	return Response{
 		Message: m,
 		Status:  "success",
@@ -83,7 +83,7 @@ func BuildSuccessResponse(m string, s int, body any) Response {
 }
 
 // returns error response struct
-func BuildErrorResponse(m string, s int, err error) Response {
+func BuildErrorResponse(m string, err error) Response {
 	return Response{
 		Message: m,
 		Status:  "failure",
@@ -93,11 +93,11 @@ func BuildErrorResponse(m string, s int, err error) Response {
 }
 
 // sends response to client
-func WriteJson(w http.ResponseWriter, status int, payload any) {
+func WriteJson(w http.ResponseWriter, status int, r any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 
-	err := json.NewEncoder(w).Encode(payload)
+	err := json.NewEncoder(w).Encode(r)
 	if err != nil {
 		http.Error(w, `{"error": "failed to encode response"}`, http.StatusInternalServerError)
 	}
