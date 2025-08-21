@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -17,11 +16,10 @@ func RegisterApiRoues() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
-		log.Debug().Msg("health was called")
-		json.NewEncoder(w).Encode(struct {
+		utils.WriteJson(w, http.StatusOK, struct {
 			Message string `json:"message"`
 		}{
-			Message: "alive!",
+			Message: "alive",
 		})
 	})
 

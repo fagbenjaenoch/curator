@@ -19,7 +19,7 @@ func LoadConfig() *Config {
 	cfg := &Config{
 		Port:           getEnv("PORT", "3000"),
 		AllowedOrigins: getEnv("ALLOWED_ORIGINS", "*"),
-		ServiceName:    getEnv("SERVICE_NAME", "curator-backend"),
+		ServiceName:    "curator-backend",
 		BaseRoute:      "/api/v1/",
 	}
 

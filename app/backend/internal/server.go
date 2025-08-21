@@ -1,7 +1,6 @@
 package server
 
 import (
-	"encoding/json"
 	"net/http"
 	"time"
 
@@ -12,10 +11,6 @@ import (
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 )
-
-type Response struct {
-	Message string `json:"message"`
-}
 
 func New(cfg *utils.Config) *http.Server {
 	r := chi.NewRouter()
@@ -35,7 +30,9 @@ func New(cfg *utils.Config) *http.Server {
 	r.Use(chiMiddleware.Recoverer)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(Response{
+		utils.WriteJson(w, http.StatusOK, struct {
+			Message string `json:"message"`
+		}{
 			Message: "Hello world",
 		})
 	})
