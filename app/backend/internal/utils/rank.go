@@ -1,8 +1,6 @@
 package utils
 
 import (
-	"fmt"
-
 	textrank "github.com/DavidBelicza/TextRank/v2"
 	"github.com/rs/zerolog/log"
 )
@@ -21,15 +19,15 @@ func RankText(rawText string) (string, error) {
 
 	tr.Ranking(algo)
 
-	rankedPhrases := textrank.FindPhrases(tr)
+	// rankedPhrases := textrank.FindPhrases(tr)
 
-	sentences := textrank.FindSentencesByRelationWeight(tr, 5)
+	// sentences := textrank.FindSentencesByRelationWeight(tr, 5)
 
-	log.Debug().Msg(fmt.Sprintf("Ranked sentences: %v", sentences))
+	// log.Debug().Msg(fmt.Sprintf("Ranked sentences: %v", sentences))
 
-	for _, phrase := range rankedPhrases {
-		fmt.Println(phrase.Right)
-	}
+	// for _, phrase := range rankedPhrases {
+	// 	fmt.Println(phrase.Right)
+	// }
 
 	return "", nil
 }

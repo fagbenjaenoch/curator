@@ -78,18 +78,36 @@ func (p Parser) ParsePDF(file multipart.File) (string, error) {
 		return "", err
 	}
 
-	var allText strings.Builder
+	var result strings.Builder
 	numPages := r.NumPage()
 	for i := 1; i <= numPages; i++ {
 		p := r.Page(i)
-		content := p.Content()
-		for _, txt := range content.Text {
-			allText.WriteString(txt.S)
-			allText.WriteString(" ")
+
+		if p.V.IsNull() {
+			continue
 		}
-		allText.WriteString("\n\n")
+
+		content := p.Content()
+		var prevX, prevY float64
+		for _, txt := range content.Text {
+			if prevY != 0 && prevY-txt.Y > 5 {
+				result.WriteString("\n")
+			}
+
+			if prevX != 0 && (txt.X-prevX) > (txt.FontSize*0.7) {
+				// fmt.Println(txt.X - prevX)
+				// fmt.Println(txt.FontSize * 0.8)
+				result.WriteString(" ")
+			}
+
+			result.WriteString(txt.S)
+			prevX, prevY = txt.X, txt.Y
+		}
+
+		result.WriteString("\n\n")
 	}
-	return allText.String(), nil
+	fmt.Println(result.String())
+	return result.String(), nil
 }
 
 func (p Parser) ParseDOCX(file multipart.File) (string, error) {
