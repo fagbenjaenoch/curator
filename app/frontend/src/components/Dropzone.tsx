@@ -53,7 +53,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
         body: formData,
       });
       const result = await response.json();
-      setData(result.data);
+      setData(result.payload);
     } catch (error) {
       console.error(error);
     } finally {
@@ -128,7 +128,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
 
   return (
     <div className="space-y-4">
-      <p>{data}</p>
+      <p className="overflow-auto">{data}</p>
       <Button onClick={() => setData(null)}>Clear</Button>
     </div>
   );

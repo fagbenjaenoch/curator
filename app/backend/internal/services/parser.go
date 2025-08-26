@@ -2,7 +2,9 @@ package service
 
 import (
 	"fmt"
+	"math"
 	"mime/multipart"
+	"sort"
 	"strings"
 
 	"baliance.com/gooxml/document"
@@ -71,14 +73,20 @@ func NewParser() Parser {
 	return Parser{}
 }
 
-func (p Parser) ParsePDF(file multipart.File) (string, error) {
+type Glyph struct {
+	Char  string
+	X, Y  float64
+	Width float64
+}
+
+func (p Parser) ParsePDF(file multipart.File) (words string, err error) {
 	log.Info().Msg("ParsePDF was called")
 	r, err := pdf.NewReader(file, fileSize(file))
 	if err != nil {
 		return "", err
 	}
 
-	var result strings.Builder
+	var result []string
 	numPages := r.NumPage()
 	for i := 1; i <= numPages; i++ {
 		p := r.Page(i)
@@ -87,27 +95,31 @@ func (p Parser) ParsePDF(file multipart.File) (string, error) {
 			continue
 		}
 
+		var glyphs []Glyph
 		content := p.Content()
-		var prevX, prevY float64
 		for _, txt := range content.Text {
-			if prevY != 0 && prevY-txt.Y > 5 {
-				result.WriteString("\n")
-			}
-
-			if prevX != 0 && (txt.X-prevX) > (txt.FontSize*0.7) {
-				// fmt.Println(txt.X - prevX)
-				// fmt.Println(txt.FontSize * 0.8)
-				result.WriteString(" ")
-			}
-
-			result.WriteString(txt.S)
-			prevX, prevY = txt.X, txt.Y
+			glyphs = append(glyphs, Glyph{
+				Char:  txt.S,
+				X:     txt.X,
+				Y:     txt.Y,
+				Width: txt.W,
+			})
 		}
 
-		result.WriteString("\n\n")
+		sort.Slice(glyphs, func(i, j int) bool {
+			if math.Abs(glyphs[i].Y-glyphs[j].Y) > 2.0 {
+				return glyphs[i].Y > glyphs[j].Y
+			}
+			return glyphs[i].X < glyphs[j].X
+		})
+
+		wordsArray := groupIntoWords(glyphs)
+		result = append(result, wordsArray...)
 	}
-	fmt.Println(result.String())
-	return result.String(), nil
+
+	words = strings.Join(result, " ")
+	fmt.Println(len(result))
+	return words, err
 }
 
 func (p Parser) ParseDOCX(file multipart.File) (string, error) {
@@ -141,4 +153,32 @@ func fileSize(file multipart.File) int64 {
 		return pos
 	}
 	return 0
+}
+
+const spaceTolerance = 0.1
+
+func groupIntoWords(glyphs []Glyph) []string {
+	var words []string
+	var currentWord string
+	var prev Glyph
+
+	for i, g := range glyphs {
+		if i > 0 {
+			gap := g.X - (prev.X + prev.Width)
+			if gap > spaceTolerance*prev.Width {
+				if currentWord != "" {
+					words = append(words, currentWord)
+				}
+				currentWord = ""
+			}
+		}
+		currentWord += g.Char
+		prev = g
+	}
+
+	if currentWord != "" {
+		words = append(words, currentWord)
+	}
+
+	return words
 }
