@@ -21,12 +21,27 @@ func RankText(rawText string) (string, error) {
 
 	tr.Ranking(algo)
 
-	// rankedPhrases := textrank.FindPhrases(tr)
+	rankedPhrases := textrank.FindPhrases(tr)
+
+	var uniquePhrases []string
+	seen := make(map[string]struct{})
+
+	for _, el := range rankedPhrases {
+		if _, ok := seen[el.Right]; !ok {
+			seen[el.Right] = struct{}{}
+			uniquePhrases = append(uniquePhrases, el.Right)
+		}
+	}
 
 	var result strings.Builder
-	sentences := textrank.FindSentencesByRelationWeight(tr, 5)
-	for _, sentence := range sentences {
-		result.WriteString(sentence.Value)
+	// sentences := textrank.FindSentencesByRelationWeight(tr, 2)
+
+	top := 10
+	for i := 0; i < top; i++ {
+		result.WriteString(uniquePhrases[i])
+		if i < top-1 {
+			result.WriteString(" ")
+		}
 	}
 
 	// for _, phrase := range rankedPhrases {
