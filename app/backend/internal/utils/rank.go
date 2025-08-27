@@ -1,12 +1,14 @@
 package utils
 
 import (
+	"fmt"
+	"strings"
+
 	textrank "github.com/DavidBelicza/TextRank/v2"
 	"github.com/rs/zerolog/log"
 )
 
 func RankText(rawText string) (string, error) {
-	log.Debug().Msg("text rank was called")
 	tr := textrank.NewTextRank()
 
 	rule := textrank.NewDefaultRule()
@@ -21,13 +23,17 @@ func RankText(rawText string) (string, error) {
 
 	// rankedPhrases := textrank.FindPhrases(tr)
 
-	// sentences := textrank.FindSentencesByRelationWeight(tr, 5)
-
-	// log.Debug().Msg(fmt.Sprintf("Ranked sentences: %v", sentences))
+	var result strings.Builder
+	sentences := textrank.FindSentencesByRelationWeight(tr, 5)
+	for _, sentence := range sentences {
+		result.WriteString(sentence.Value)
+	}
 
 	// for _, phrase := range rankedPhrases {
 	// 	fmt.Println(phrase.Right)
 	// }
 
-	return "", nil
+	log.Debug().Msg("text rank was called")
+	log.Debug().Msg(fmt.Sprintf("Ranked sentences: %v", result.String()))
+	return result.String(), nil
 }

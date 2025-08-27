@@ -118,7 +118,6 @@ func (p Parser) ParsePDF(file multipart.File) (words string, err error) {
 	}
 
 	words = strings.Join(result, " ")
-	fmt.Println(len(result))
 	return words, err
 }
 
