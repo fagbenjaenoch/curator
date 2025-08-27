@@ -63,8 +63,8 @@ func (ps *ParserService) Parse(files []*multipart.FileHeader) (string, error) {
 
 		result += parsedDocument
 	}
-	utils.RankText(result)
-	return result, nil
+	rankedPhrases := utils.RankText(result)
+	return rankedPhrases, nil
 }
 
 type Parser struct{}

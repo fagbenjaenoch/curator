@@ -8,7 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func RankText(rawText string) (string, error) {
+func RankText(rawText string) string {
 	tr := textrank.NewTextRank()
 
 	rule := textrank.NewDefaultRule()
@@ -50,5 +50,5 @@ func RankText(rawText string) (string, error) {
 
 	log.Debug().Msg("text rank was called")
 	log.Debug().Msg(fmt.Sprintf("Ranked sentences: %v", result.String()))
-	return result.String(), nil
+	return result.String()
 }
