@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	service "github.com/fagbenjaenoch/curator/app/backend/internal/services"
+	"github.com/fagbenjaenoch/curator/app/backend/internal/services"
 	"github.com/fagbenjaenoch/curator/app/backend/internal/utils"
 	"github.com/go-chi/chi"
 	"github.com/rs/zerolog/log"
@@ -31,11 +31,13 @@ func RegisterApiRoues() chi.Router {
 			return
 		}
 
-		documentParser := service.NewParser()
-		parsingService := service.NewParsingService(documentParser)
+		documentParser := services.NewParser()
+		parsingService := services.NewParsingService(documentParser)
 
 		files := r.MultipartForm.File["files"]
 		result, err := parsingService.ParseAndRank(files)
+		searchResults := services.YoutubeSearch(result)
+		fmt.Println("Youtube Search Results", searchResults)
 		if err != nil {
 			errMsg := "could not parse file"
 			log.Error().Err(fmt.Errorf("%s: %s", errMsg, err)).Msg("")
