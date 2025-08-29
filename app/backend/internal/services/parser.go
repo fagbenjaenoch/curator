@@ -29,7 +29,7 @@ func NewParsingService(dp DocumentParser) *ParserService {
 	}
 }
 
-func (ps *ParserService) Parse(files []*multipart.FileHeader) (string, error) {
+func (ps *ParserService) ParseAndRank(files []*multipart.FileHeader) (string, error) {
 	var result string
 	for _, fileHeader := range files {
 		file, err := fileHeader.Open()
@@ -63,6 +63,7 @@ func (ps *ParserService) Parse(files []*multipart.FileHeader) (string, error) {
 
 		result += parsedDocument
 	}
+
 	rankedPhrases := utils.RankText(result)
 	return rankedPhrases, nil
 }
@@ -80,7 +81,6 @@ type Glyph struct {
 }
 
 func (p Parser) ParsePDF(file multipart.File) (words string, err error) {
-	log.Info().Msg("ParsePDF was called")
 	r, err := pdf.NewReader(file, fileSize(file))
 	if err != nil {
 		return "", err
@@ -122,7 +122,6 @@ func (p Parser) ParsePDF(file multipart.File) (words string, err error) {
 }
 
 func (p Parser) ParseDOCX(file multipart.File) (string, error) {
-	log.Info().Msg("ParseDOCX was called")
 	doc, err := document.Read(file, int64(fileSize(file)))
 	if err != nil {
 		return "", err

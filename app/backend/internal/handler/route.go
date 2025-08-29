@@ -35,7 +35,7 @@ func RegisterApiRoues() chi.Router {
 		parsingService := service.NewParsingService(documentParser)
 
 		files := r.MultipartForm.File["files"]
-		result, err := parsingService.Parse(files)
+		result, err := parsingService.ParseAndRank(files)
 		if err != nil {
 			errMsg := "could not parse file"
 			log.Error().Err(fmt.Errorf("%s: %s", errMsg, err)).Msg("")
@@ -44,7 +44,6 @@ func RegisterApiRoues() chi.Router {
 			utils.WriteJson(w, http.StatusInternalServerError, res)
 			return
 		}
-		log.Info().Msg("parsed document successfully")
 
 		res := utils.BuildSuccessResponse("file parsed successfully", result)
 		utils.WriteJson(w, http.StatusOK, res)
