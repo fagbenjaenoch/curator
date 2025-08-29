@@ -135,7 +135,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-2">
+      <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-3">
         {data.map(({ title, thumb_url, url }) => (
           <ResultCard title={title} thumbUrl={thumb_url} url={url} />
         ))}
