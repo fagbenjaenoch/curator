@@ -35,7 +35,7 @@ func YoutubeSearch(query string) []SearchItem {
 	for _, item := range response.Items {
 		videoTitle := SearchItem{
 			Title:     item.Snippet.Title,
-			Thumbnail: item.Snippet.Thumbnails.Default.Url,
+			Thumbnail: item.Snippet.Thumbnails.Standard.Url,
 			Url:       "https://www.youtube.com/watch?v=" + item.Id.VideoId,
 		}
 		result = append(result, videoTitle)
