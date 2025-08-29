@@ -19,17 +19,17 @@ type DocumentParser interface {
 	ParseDoc(file multipart.File) (string, error)
 }
 
-type ParserService struct {
+type ParsingService struct {
 	parser DocumentParser
 }
 
-func NewParsingService(dp DocumentParser) *ParserService {
-	return &ParserService{
+func NewParsingService(dp DocumentParser) *ParsingService {
+	return &ParsingService{
 		parser: dp,
 	}
 }
 
-func (ps *ParserService) ParseAndRank(files []*multipart.FileHeader) (string, error) {
+func (ps *ParsingService) ParseAndRank(files []*multipart.FileHeader) (string, error) {
 	var result string
 	for _, fileHeader := range files {
 		file, err := fileHeader.Open()
