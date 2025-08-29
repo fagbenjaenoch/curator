@@ -36,7 +36,7 @@ func RankText(rawText string) string {
 	var result strings.Builder
 	// sentences := textrank.FindSentencesByRelationWeight(tr, 2)
 
-	top := 10
+	top := 5
 	for i := 0; i < top; i++ {
 		result.WriteString(uniquePhrases[i])
 		if i < top-1 {
