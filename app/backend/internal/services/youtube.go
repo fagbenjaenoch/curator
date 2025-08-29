@@ -11,7 +11,7 @@ import (
 )
 
 type SearchItem struct {
-	Title string
+	Title string `json:"title"`
 }
 
 func YoutubeSearch(query string) []SearchItem {

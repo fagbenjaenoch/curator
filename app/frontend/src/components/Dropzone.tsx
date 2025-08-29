@@ -3,6 +3,11 @@ import { useDropzone } from "react-dropzone";
 import { Loader, Trash2, UploadIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
+import ResultCard from "./ResultCard";
+
+type APIResponse = {
+  title: string;
+};
 
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const FILE_THRESHOLD = 5 * 1024 * 1024; // 5MB
@@ -10,7 +15,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const [internalError, setInternalError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<APIResponse[] | null>(null);
   let totalFileSize = 0;
   files.forEach((file) => (totalFileSize = totalFileSize + file.size));
 
@@ -53,7 +58,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
         body: formData,
       });
       const result = await response.json();
-      setData(result.payload);
+      setData(result.payload as APIResponse[]);
     } catch (error) {
       console.error(error);
     } finally {
@@ -128,7 +133,11 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
 
   return (
     <div className="space-y-4">
-      <p className="overflow-auto">{data}</p>
+      <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-2">
+        {data.map(({ title }) => (
+          <ResultCard title={title} />
+        ))}
+      </div>
       <Button onClick={() => setData(null)}>Clear</Button>
     </div>
   );

@@ -37,7 +37,6 @@ func RegisterApiRoues() chi.Router {
 		files := r.MultipartForm.File["files"]
 		result, err := parsingService.ParseAndRank(files)
 		searchResults := services.YoutubeSearch(result)
-		fmt.Println("Youtube Search Results", searchResults)
 		if err != nil {
 			errMsg := "could not parse file"
 			log.Error().Err(fmt.Errorf("%s: %s", errMsg, err)).Msg("")
@@ -47,7 +46,7 @@ func RegisterApiRoues() chi.Router {
 			return
 		}
 
-		res := utils.BuildSuccessResponse("file parsed successfully", result)
+		res := utils.BuildSuccessResponse("file parsed successfully", searchResults)
 		utils.WriteJson(w, http.StatusOK, res)
 	})
 
