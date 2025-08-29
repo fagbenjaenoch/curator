@@ -11,7 +11,9 @@ import (
 )
 
 type SearchItem struct {
-	Title string `json:"title"`
+	Title     string `json:"title"`
+	Thumbnail string `json:"thumb_url"`
+	Url       string `json:"url"`
 }
 
 func YoutubeSearch(query string) []SearchItem {
@@ -32,7 +34,9 @@ func YoutubeSearch(query string) []SearchItem {
 	var result []SearchItem
 	for _, item := range response.Items {
 		videoTitle := SearchItem{
-			Title: item.Snippet.Title,
+			Title:     item.Snippet.Title,
+			Thumbnail: item.Snippet.Thumbnails.Default.Url,
+			Url:       "https://www.youtube.com/watch?v=" + item.Id.VideoId,
 		}
 		result = append(result, videoTitle)
 	}
