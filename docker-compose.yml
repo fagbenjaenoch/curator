@@ -1,0 +1,39 @@
+version: "3.8"
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: ./app/backend
+    depends_on:
+      - redis
+    environment:
+      - REDIS_ADDR=redis:6379
+      - PORT=8080
+    ports:
+      - "8080:8080"
+    networks:
+      - curator
+
+  frontend:
+    build: ./app/frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    networks:
+      - curator
+
+  python-service:
+    build: ./app/python-service
+    ports:
+      - "5000:5000"
+    networks:
+      - curator
+
+networks:
+  curator:
+    driver: bridge
