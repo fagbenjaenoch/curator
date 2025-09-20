@@ -1,5 +1,5 @@
 # ---------- BASE STAGE ----------
-FROM oven/bun:1.2.18 as base
+FROM oven/bun:1.2.18 AS base
 
 WORKDIR /app
 

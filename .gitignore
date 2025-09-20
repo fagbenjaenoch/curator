@@ -35,4 +35,4 @@ app/backend/cmd/api/test-results/
 *.log
 
 # OS
-Thumbs.db
+Thumbs.dbs

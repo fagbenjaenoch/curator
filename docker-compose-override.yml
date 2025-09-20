@@ -8,7 +8,7 @@ services:
   backend:
     build:
       context: ./app/backend
-      target: prod
+      target: dev
     depends_on:
       - redis
     environment:
@@ -18,17 +18,22 @@ services:
       - "3000:3000"
     networks:
       - curator
+    volumes:
+      - ./app/backend:/app
 
   frontend:
     build:
       context: ./app/frontend
-      target: prod
+      target: dev
     depends_on:
       - backend
     ports:
       - "4173:4173"
     networks:
       - curator
+    volumes:
+      - ./app/frontend:/app
+      - /app/node_modules
 
   python-service:
     build: ./app/python-service
