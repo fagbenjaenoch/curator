@@ -7,8 +7,8 @@ WORKDIR /app
 COPY go.mod ./
 COPY go.sum ./
 
-# Download dependencies
-RUN go mod download
+# Mount a cache and download dependencies
+RUN --mount=type=cache,target=/go/pkg/mod go mod download
 
 # --------- BUILDER STAGE --------- 
 

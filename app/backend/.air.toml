@@ -1,4 +1,4 @@
-# Watch only backend folder
+# even-better-toml: no-schema
 root = "."
 tmp_dir = "tmp"
 
@@ -8,15 +8,6 @@ tmp_dir = "tmp"
   full_bin = "tmp/main.exe"
   cmd = "go build -o tmp/main.exe ."
   delay = 1000
-
-  # Don't rebuild when frontend or other junk changes
-  exclude_dir = [
-    "assets",
-    "tmp",
-    "vendor",
-    "testdata",
-    "app/frontend"
-  ]
 
   include_ext = ["go", "tpl", "tmpl", "html"]
 
