@@ -7,7 +7,9 @@ services:
       - "6379:6379"
 
   backend:
-    build: ./app/backend
+    build:
+      context: ./app/backend
+      target: prod
     depends_on:
       - redis
     environment:
@@ -19,7 +21,9 @@ services:
       - curator
 
   frontend:
-    build: ./app/frontend
+    build:
+      context: ./app/frontend
+      target: prod
     depends_on:
       - backend
     ports:

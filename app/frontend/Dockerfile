@@ -1,5 +1,5 @@
-# ---------- Build stage ----------
-FROM oven/bun:1.2.18 as builder
+# ---------- BASE STAGE ----------
+FROM oven/bun:1.2.18 as base
 
 WORKDIR /app
 
@@ -9,14 +9,18 @@ COPY package.json bun.lock* ./
 # Install ALL deps (including dev) for building
 RUN bun install
 
+
+# ---------- BUILDER STAGE ----------
+FROM base AS builder
+
 # Copy rest of code
 COPY . .
 
 # Run build
 RUN bun run build
 
-# ---------- Runtime stage ----------
-FROM oven/bun:1.2.18
+# ---------- PRODUCTION STAGE ----------
+FROM builder AS prod
 
 WORKDIR /app
 
@@ -28,4 +32,14 @@ RUN bun install --production
 COPY --from=builder /app/dist ./dist
 
 EXPOSE 4173
+
 CMD ["bun", "run", "start"]
+
+# ---------- DEV STAGE ----------
+FROM base AS dev
+
+COPY . .
+
+EXPOSE 5173
+
+CMD ["bun", "run", "dev"]
