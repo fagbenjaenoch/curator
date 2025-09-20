@@ -1,32 +1,31 @@
-# Stage 1: Build the React application
-FROM oven/bun:1.1 as builder
+# ---------- Build stage ----------
+FROM oven/bun:1.2.18 as builder
 
-COPY . /app
 WORKDIR /app
 
-# Copy package.json, pnpm-lock.yaml, and pnpm-workspace.yaml (if using monorepo)
-COPY package.json ./
-# COPY pnpm-lock.yaml ./
-# If you have a monorepo, also copy pnpm-workspace.yaml
-# COPY pnpm-workspace.yaml 
+# Copy manifests
+COPY package.json bun.lock* ./
 
-# Install dependencies
-RUN bun install --production
+# Install ALL deps (including dev) for building
+RUN bun install
 
-# Copy the rest of the application code
+# Copy rest of code
 COPY . .
 
-# Build the React application
-RUN bun build
+# Run build
+RUN bun run build
 
-# Stage 2: Serve the built application with a lightweight web server
-FROM nginx:alpine
+# ---------- Runtime stage ----------
+FROM oven/bun:1.2.18
 
-# Copy the built application from the builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Expose the port Nginx listens on
-EXPOSE 80
+# Copy only what we need for runtime
+COPY package.json bun.lock* ./
+RUN bun install --production
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Copy built files from builder stage
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 3000
+CMD ["bun", "run", "start"]
