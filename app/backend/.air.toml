@@ -6,7 +6,7 @@ tmp_dir = "tmp"
   # Build binary to tmp folder (Windows-friendly)
   bin = "tmp/main.exe"
   full_bin = "tmp/main.exe"
-  cmd = "go build -o tmp/main.exe ./cmd/api"
+  cmd = "go build -o tmp/main.exe ."
   delay = 1000
 
   # Don't rebuild when frontend or other junk changes

@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func main() {
+func Run() {
 	cfg := utils.LoadConfig()
 	srv := server.New(cfg)
 
