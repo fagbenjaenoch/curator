@@ -36,3 +36,6 @@ app/backend/cmd/api/test-results/
 
 # OS
 Thumbs.dbs
+
+# go build
+app/backend/tmp/
