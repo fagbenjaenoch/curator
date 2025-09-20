@@ -38,4 +38,4 @@ app/backend/cmd/api/test-results/
 Thumbs.dbs
 
 # go build
-app/backend/tmp/
+app/backend/tmp/  
