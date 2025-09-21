@@ -31,7 +31,7 @@ RUN bun install --production
 # Copy built files from builder stage
 COPY --from=builder /app/dist ./dist
 
-EXPOSE 4173
+EXPOSE 5173
 
 CMD ["bun", "run", "start"]
 
