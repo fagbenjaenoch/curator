@@ -37,5 +37,18 @@ app/backend/cmd/api/test-results/
 # OS
 Thumbs.dbs
 
-# go build
-app/backend/tmp/  
+# Go
+app/backend/tmp/
+bin/
+pkg/
+*.test
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pytest_cache/
+*.mypy_cache/
+.env
+.venv
