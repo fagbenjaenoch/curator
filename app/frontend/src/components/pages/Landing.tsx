@@ -1,6 +1,6 @@
 import ovalMarker from "@/assets/oval marker.svg";
 import Dropzone from "@/components/Dropzone";
-import Layout from "../Layout";
+import Layout from "@/components/Layout";
 export default function Landing() {
   return (
     <Layout>
