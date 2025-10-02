@@ -39,6 +39,10 @@ services:
     build: ./app/python-service
     ports:
       - "5000:5000"
+    volumes:
+      - ./app:/app
+    environment:
+      - PYTHONUNBUFFERED=1
     networks:
       - curator
 
