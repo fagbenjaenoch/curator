@@ -48,7 +48,7 @@ CMD ["./main"]
 # --------- DEV STAGE --------- 
 FROM base AS dev
 
-RUN go install github.com/cosmtrek/air@latest
+RUN go install github.com/air-verse/air@latest
 
 COPY . .
 
