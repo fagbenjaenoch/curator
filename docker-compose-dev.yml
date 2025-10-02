@@ -28,7 +28,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "4173:4173"
+      - "5173:5173"
     networks:
       - curator
     volumes:
@@ -40,9 +40,9 @@ services:
       context: ./app/python-service
       target: dev
     ports:
-      - "5000:5000"
+      - "8000:8000"
     volumes:
-      - ./app:/app
+      - ./app/python-service:/app
     environment:
       - PYTHONUNBUFFERED=1
     networks:
