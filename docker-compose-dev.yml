@@ -36,7 +36,9 @@ services:
       - /app/node_modules
 
   python-service:
-    build: ./app/python-service
+    build:
+      context: ./app/python-service
+      target: dev
     ports:
       - "5000:5000"
     volumes:
