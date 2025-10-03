@@ -5,7 +5,7 @@ from transformers import pipeline
 
 
 model_name = "paraphrase-MiniLM-L6-v2"
-model = SentenceTransformer(model_name)
+sentence_model = SentenceTransformer(model_name)
 kw_model = KeyBERT(model_name)
 
 paraphraser = pipeline("text2text-generation", model="t5-small")
@@ -21,7 +21,7 @@ async def get_keywords(request: Request):
     if rawText is None:
         return {"error": "Missing 'raw' field in request body."}
 
-    result = kw_model.extract_keywords(rawText)
+    result = kw_model.extract_keywords(rawText, keyphrase_ngram_range=(1, 2))
 
     return {"result": result}
 
