@@ -5,22 +5,6 @@ services:
     ports:
       - "6379:6379"
 
-  backend:
-    build:
-      context: ./app/backend
-      target: dev
-    depends_on:
-      - redis
-    environment:
-      - REDIS_ADDR=redis:6379
-      - PORT=3000
-    ports:
-      - "3000:3000"
-    networks:
-      - curator
-    volumes:
-      - ./app/backend:/app
-
   frontend:
     build:
       context: ./app/frontend
@@ -35,14 +19,14 @@ services:
       - ./app/frontend:/app
       - /app/node_modules
 
-  python-service:
+  backend:
     build:
-      context: ./app/python-service
+      context: ./app/backend
       target: dev
     ports:
       - "8000:8000"
     volumes:
-      - ./app/python-service:/app
+      - ./app/backend:/app
     environment:
       - PYTHONUNBUFFERED=1
     networks:
