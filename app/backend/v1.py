@@ -38,3 +38,23 @@ async def extract_pdf_content(file: UploadFile = File(...)):
         parsed_text += page.get_text("text")  # type: ignore
 
     return {"payload": parsed_text, "filename": file.filename, "pages": len(doc)}
+
+
+@router.post("/extract-pdf-keywords")
+async def extract_pdf_keywords(file: UploadFile = File(...)):
+    pdf_bytes = await file.read()
+
+    doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
+
+    parsed_text = ""
+    for page_num in range(len(doc)):
+        page = doc[page_num]
+        parsed_text += page.get_text("text")  # type: ignore
+
+    result = kw_model.extract_keywords(
+        parsed_text, keyphrase_ngram_range=(1, 2)
+    )  # keyphrase_ngram_range sets the amount of words per phrase
+
+    keywords = [(k[0]) for k in result]
+
+    return {"payload": keywords, "filename": file.filename, "pages": len(doc)}
