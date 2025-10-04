@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils";
+import { cn, computeFileSize } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
-import { Loader, Trash2, UploadIcon } from "lucide-react";
+import { Loader, UploadIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import ResultCard from "./ResultCard";
@@ -13,13 +13,12 @@ type APIResponse = {
 
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const FILE_THRESHOLD = 5 * 1024 * 1024; // 5MB
-  const [files, setFiles] = useState<File[]>([]);
+  const [file, setFile] = useState<File | null>(null);
   const [internalError, setInternalError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [data, setData] = useState<APIResponse[] | null>(null);
-  let totalFileSize = 0;
-  files.forEach((file) => (totalFileSize = totalFileSize + file.size));
+  const [payload, setPayload] = useState<APIResponse[] | null>(null);
+  const totalFileSize = file?.size ?? 0;
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) {
@@ -32,40 +31,43 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
       return;
     }
 
-    const newFiles = acceptedFiles.map((file) =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      }),
-    );
+    const acceptedFile = acceptedFiles[0];
+    const fileObject = Object.assign(acceptedFile, {
+      preview: URL.createObjectURL(acceptedFile),
+    });
 
-    setFiles(newFiles);
+    setFile(fileObject);
   }, []);
 
-  const handleUpload = async (files: File[]) => {
+  const handleUpload = async (file: File) => {
+    setUploadError("");
     setIsUploading(true);
-    if (files.length === 0) {
+    if (!file) {
       return;
     }
 
-    setUploadError("");
     if (totalFileSize > FILE_THRESHOLD) {
       setUploadError(
-        `Files are more than ${(FILE_THRESHOLD / (1024 * 1024)).toFixed(2)}MB`,
+        `File is more than ${(FILE_THRESHOLD / (1024 * 1024)).toFixed(0)}MB`,
       );
       setIsUploading(false);
       return;
     }
 
     const formData = new FormData();
-    files.forEach((file) => formData.append("files", file));
+    formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:3000/api/v1/upload", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "http://localhost:3000/api/v1/extract-pdf-content",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
       const result = await response.json();
-      setData(result.payload as APIResponse[]);
+
+      setPayload(result.payload as APIResponse[]);
     } catch (error) {
       console.error(error);
     } finally {
@@ -73,7 +75,6 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     }
   };
 
-  // Documents that are allowed
   const acceptedFiletypes = {
     "application/pdf": [".pdf"],
     "application/msword": [".doc"],
@@ -86,8 +87,6 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: onDrop,
     accept: acceptedFiletypes,
-    // maxSize: 20 * 1024 * 1024, // 20MB
-    // maxFiles: 1,
   });
 
   const renderDropZone = () => {
@@ -118,91 +117,93 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     );
   };
 
-  if (!data) {
-    return files.length === 0 ? (
-      renderDropZone()
-    ) : (
+  // initial render
+  if (!payload) {
+    return file ? (
       <div className="space-y-4">
-        <FileList files={files} setFiles={setFiles} />
-        <Button
-          onClick={() => handleUpload(files)}
-          className="cursor-pointer"
-          disabled={isUploading}
-        >
-          {isUploading && <Loader className="animate-spin" />}
-          {isUploading ? "Uploading" : "Upload"}
-        </Button>
+        <FileCard
+          file={file}
+          setFile={setFile}
+          isUploading={isUploading}
+          handleUpload={handleUpload}
+          setInternalError={setInternalError}
+        />
+
         {uploadError && (
           <p className="text-xs text-red-500 mt-2">{uploadError}</p>
         )}
       </div>
+    ) : (
+      renderDropZone()
     );
   }
 
   return (
     <div className="space-y-4">
       <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-3">
-        {data.map(({ title, thumb_url, url }) => (
+        {payload.map(({ title, thumb_url, url }) => (
           <ResultCard title={title} thumbUrl={thumb_url} url={url} />
         ))}
       </div>
-      <Button onClick={() => setData(null)}>Clear</Button>
+      <Button onClick={() => setPayload(null)}>Clear</Button>
     </div>
   );
 }
 
-function FileList({
-  files,
-  setFiles,
+function FileCard({
+  file,
+  setFile: setFiles,
+  isUploading,
+  handleUpload,
+  setInternalError,
 }: {
-  files: File[];
-  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  file: File;
+  setFile: React.Dispatch<React.SetStateAction<File | null>>;
+  setInternalError: React.Dispatch<React.SetStateAction<string | null>>;
+  isUploading: boolean;
+  handleUpload: (file: File) => void;
 }) {
-  const removeFile = (file: File) => {
-    const newFiles = files.filter((f) => f !== file);
-    setFiles(newFiles);
-  };
-
-  const computeFileSize = (file: File) => {
-    switch (true) {
-      case file.size < 1024: // Less than 1KB
-        return `${file.size.toFixed(2)} B`;
-      case file.size < 1024 * 1024: // Less than 1MB
-        return `${(file.size / 1024).toFixed(2)} KB`;
-      case file.size < 1024 * 1024 * 1024: // Less than 1GB
-        return `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
-      default:
-        return `${(file.size / 1024).toFixed(2)} KB`;
-    }
+  const removeFile = () => {
+    setInternalError(null);
+    setFiles(null);
   };
 
   return (
-    <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-2">
-      {files.map((file, index) => (
-        <div
-          key={index}
-          className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow"
-        >
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center p-5">
-              <span className="text-xs font-medium">
-                {file.name.split(".").pop()?.toUpperCase()}
-              </span>
-            </div>
-
-            <div className="flex flex-col items-start space-y-1">
-              <p className="text-sm font-medium truncate max-w-[15rem] sm:max-w-xs">
-                {file.name}
-              </p>
-              <p className="text-xs text-gray-500">{computeFileSize(file)}</p>
-            </div>
-          </div>
-
-          <Button variant="ghost" size="sm" onClick={() => removeFile(file)}>
-            <Trash2 className="w-4 h-4" />
-          </Button>
+    <div className="mx-auto max-w-[700px] flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow">
+      <div className="flex items-center gap-2">
+        <div className="w-16 h-16 bg-gray-300 rounded flex items-center justify-center p-5">
+          <span className="text-xs font-lg">
+            {file.name.split(".").pop()?.toUpperCase()}
+          </span>
         </div>
-      ))}
+
+        <div className="flex flex-col items-start space-y-1">
+          <p className="text-sm font-medium truncate max-w-[15rem] sm:max-w-xs">
+            {file.name}
+          </p>
+          <p className="text-xs text-gray-500">{computeFileSize(file)}</p>
+        </div>
+      </div>
+
+      <div className="space-x-2">
+        <Button
+          onClick={() => handleUpload(file)}
+          className="cursor-pointer"
+          disabled={isUploading}
+        >
+          {isUploading && <Loader className="animate-spin" />}
+          {isUploading ? "Uploading" : "Upload"}
+        </Button>
+
+        <Button
+          variant="destructive"
+          className="cursor-pointer"
+          size="sm"
+          onClick={() => removeFile()}
+        >
+          Remove
+        </Button>
+      </div>
     </div>
   );
 }
