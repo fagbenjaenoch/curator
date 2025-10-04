@@ -23,7 +23,12 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) {
-      setInternalError("No valid files were dropped");
+      setInternalError("An error occurred while processing files");
+      return;
+    }
+
+    if (acceptedFiles.length > 1) {
+      setInternalError("You can only upload one file");
       return;
     }
 
@@ -81,7 +86,8 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: onDrop,
     accept: acceptedFiletypes,
-    maxSize: 20 * 1024 * 1024, // 20MB
+    // maxSize: 20 * 1024 * 1024, // 20MB
+    // maxFiles: 1,
   });
 
   const renderDropZone = () => {
