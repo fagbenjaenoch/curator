@@ -185,7 +185,7 @@ function FileCard({
         </div>
       </div>
 
-      <div className="space-x-2">
+      <div className="flex space-x-2">
         <Button
           onClick={() => handleUpload(file)}
           className="cursor-pointer"
@@ -198,7 +198,6 @@ function FileCard({
         <Button
           variant="destructive"
           className="cursor-pointer"
-          size="sm"
           onClick={() => removeFile()}
         >
           Remove
