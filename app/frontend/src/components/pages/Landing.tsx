@@ -6,15 +6,13 @@ export default function Landing() {
     <Layout>
       <section className="mt-[100px] px-4 max-w-7xl mx-auto text-center">
         <h1>
-          Need help with your document?
-          <br />
-          Get curated resources{" "}
+          Find curated resources for your document{" "}
           <span className="relative text-amber-300">
             <img
               src={ovalMarker}
-              className="absolute transform right-[-1px] top-[-20px] scale-[160%] "
+              className="absolute transform right-[-1px] top-[0px] scale-[220%] "
             />
-            <span>instantly</span>
+            <span>fast</span>
           </span>
         </h1>
         <div className="min-h-[300px] max-w-7xl mt-32 mb-16">
