@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import ResultCard from "./ResultCard";
 
 type APIResponse = {
-  title: string;
-  thumb_url: string;
-  url: string;
+  payload: string;
+  filename: string;
+  pages: string;
 };
 
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
@@ -17,7 +17,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const [internalError, setInternalError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [payload, setPayload] = useState<APIResponse[] | null>(null);
+  const [payload, setPayload] = useState<APIResponse | null>(null);
   const totalFileSize = file?.size ?? 0;
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -59,7 +59,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/v1/extract-pdf-content",
+        "http://localhost:8000/v1/extract-pdf-content",
         {
           method: "POST",
           body: formData,
@@ -67,7 +67,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
       );
       const result = await response.json();
 
-      setPayload(result.payload as APIResponse[]);
+      setPayload(result as APIResponse);
     } catch (error) {
       console.error(error);
     } finally {
@@ -139,9 +139,8 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div className="space-y-4">
       <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-3">
-        {payload.map(({ title, thumb_url, url }) => (
-          <ResultCard title={title} thumbUrl={thumb_url} url={url} />
-        ))}
+        <p>{payload["payload"]}</p>
+        {/* <ResultCard title={title} thumbUrl={thumb_url} url={url} /> */}
       </div>
       <Button onClick={() => setPayload(null)}>Clear</Button>
     </div>
