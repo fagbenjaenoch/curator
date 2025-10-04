@@ -105,9 +105,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
           <p className="text-gray-500">
             Select or drag and drop your files here
           </p>
-          <p className="text-xs text-gray-400">
-            (PDF, DOC, DOCX, MD up to 20MB)
-          </p>
+          <p className="text-xs text-gray-400">(PDF files up to 5MB)</p>
         </div>
 
         {internalError && (
