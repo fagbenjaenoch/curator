@@ -26,7 +26,7 @@ async def get_keywords(request: Request):
     return {"result": result}
 
 
-@router.get("/extract-pdf-content")
+@router.post("/extract-pdf-content")
 async def extract_pdf_content(file: UploadFile = File(...)):
     pdf_bytes = await file.read()
 
@@ -37,4 +37,4 @@ async def extract_pdf_content(file: UploadFile = File(...)):
         page = doc[page_num]
         parsed_text += page.get_text("text")  # type: ignore
 
-    return {"content": parsed_text, "filename": file.filename, "pages": len(doc)}
+    return {"payload": parsed_text, "filename": file.filename, "pages": len(doc)}
