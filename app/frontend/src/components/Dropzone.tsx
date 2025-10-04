@@ -126,7 +126,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
           setFile={setFile}
           isUploading={isUploading}
           handleUpload={handleUpload}
-          setInternalError={setInternalError}
+          setUploadError={setUploadError}
         />
 
         {uploadError && (
@@ -155,16 +155,16 @@ function FileCard({
   setFile: setFiles,
   isUploading,
   handleUpload,
-  setInternalError,
+  setUploadError,
 }: {
   file: File;
   setFile: React.Dispatch<React.SetStateAction<File | null>>;
-  setInternalError: React.Dispatch<React.SetStateAction<string | null>>;
+  setUploadError: React.Dispatch<React.SetStateAction<string | null>>;
   isUploading: boolean;
   handleUpload: (file: File) => void;
 }) {
   const removeFile = () => {
-    setInternalError(null);
+    setUploadError(null);
     setFiles(null);
   };
 
