@@ -178,7 +178,7 @@ function FileCard({
         </div>
 
         <div className="flex flex-col items-start space-y-1">
-          <p className="text-sm font-medium truncate max-w-[15rem] sm:max-w-xs">
+          <p className="text-sm font-medium truncate max-w-xs sm:max-w-[30rem]">
             {file.name}
           </p>
           <p className="text-xs text-gray-500">{computeFileSize(file)}</p>
