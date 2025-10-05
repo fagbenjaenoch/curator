@@ -3,7 +3,6 @@ import { useDropzone } from "react-dropzone";
 import { Loader, UploadIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
-import ResultCard from "./ResultCard";
 
 type APIResponse = {
   payload: string;
@@ -59,7 +58,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/v1/extract-pdf-content",
+        "http://localhost:8000/v1/extract-pdf-keywords",
         {
           method: "POST",
           body: formData,
