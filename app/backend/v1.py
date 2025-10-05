@@ -55,6 +55,6 @@ async def extract_pdf_keywords(file: UploadFile = File(...)):
         parsed_text, keyphrase_ngram_range=(1, 2)
     )  # keyphrase_ngram_range sets the amount of words per phrase
 
-    keywords = [(k[0]) for k in result]
+    keywords = [(f"{k[0]} tutorial") for k in result]
 
     return {"payload": keywords, "filename": file.filename, "pages": len(doc)}
