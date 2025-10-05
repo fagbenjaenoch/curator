@@ -1,66 +1,74 @@
 import { cn } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
-import { Loader, Trash2, UploadIcon } from "lucide-react";
+import { UploadIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
-import ResultCard from "./ResultCard";
+import FileCard from "@/components/FileCard";
+import GoogleSearchCard from "./GoogleSearchCard";
 
 type APIResponse = {
-  title: string;
-  thumb_url: string;
-  url: string;
+  payload: string[];
+  filename: string;
+  pages: string;
 };
 
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const FILE_THRESHOLD = 5 * 1024 * 1024; // 5MB
-  const [files, setFiles] = useState<File[]>([]);
+  const [file, setFile] = useState<File | null>(null);
   const [internalError, setInternalError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [data, setData] = useState<APIResponse[] | null>(null);
-  let totalFileSize = 0;
-  files.forEach((file) => (totalFileSize = totalFileSize + file.size));
+  const [result, setResult] = useState<APIResponse | null>(null);
+  const totalFileSize = file?.size ?? 0;
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) {
-      setInternalError("No valid files were dropped");
+      setInternalError("An error occurred while processing files");
       return;
     }
 
-    const newFiles = acceptedFiles.map((file) =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      }),
-    );
+    if (acceptedFiles.length > 1) {
+      setInternalError("You can only upload one file");
+      return;
+    }
 
-    setFiles(newFiles);
+    const acceptedFile = acceptedFiles[0];
+    const fileObject = Object.assign(acceptedFile, {
+      preview: URL.createObjectURL(acceptedFile),
+    });
+
+    setFile(fileObject);
   }, []);
 
-  const handleUpload = async (files: File[]) => {
+  const handleUpload = async (file: File) => {
+    setUploadError("");
     setIsUploading(true);
-    if (files.length === 0) {
+    if (!file) {
       return;
     }
 
-    setUploadError("");
     if (totalFileSize > FILE_THRESHOLD) {
       setUploadError(
-        `Files are more than ${(FILE_THRESHOLD / (1024 * 1024)).toFixed(2)}MB`,
+        `File is more than ${(FILE_THRESHOLD / (1024 * 1024)).toFixed(0)}MB`,
       );
       setIsUploading(false);
       return;
     }
 
     const formData = new FormData();
-    files.forEach((file) => formData.append("files", file));
+    formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:3000/api/v1/upload", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "http://localhost:8000/v1/extract-pdf-keywords",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
       const result = await response.json();
-      setData(result.payload as APIResponse[]);
+
+      setResult(result as APIResponse);
     } catch (error) {
       console.error(error);
     } finally {
@@ -68,7 +76,6 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     }
   };
 
-  // Documents that are allowed
   const acceptedFiletypes = {
     "application/pdf": [".pdf"],
     "application/msword": [".doc"],
@@ -81,7 +88,6 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: onDrop,
     accept: acceptedFiletypes,
-    maxSize: 20 * 1024 * 1024, // 20MB
   });
 
   const renderDropZone = () => {
@@ -91,7 +97,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
         {...props}
         className={cn(
           "grid place-items-center border-8 border-dashed border-gray-200 hover:border-gray-300 rounded-4xl w-[400px] h-[300px] lg:w-[700px] lg:h-[400px] cursor-pointer mx-auto transition-colors",
-          isDragActive && "border-blue-500",
+          isDragActive && "border-green-400",
         )}
       >
         <input {...getInputProps()} />
@@ -100,9 +106,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
           <p className="text-gray-500">
             Select or drag and drop your files here
           </p>
-          <p className="text-xs text-gray-400">
-            (PDF, DOC, DOCX, MD up to 20MB)
-          </p>
+          <p className="text-xs text-gray-400">(PDF files up to 5MB)</p>
         </div>
 
         {internalError && (
@@ -112,91 +116,36 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     );
   };
 
-  if (!data) {
-    return files.length === 0 ? (
-      renderDropZone()
-    ) : (
+  // initial render
+  if (!result) {
+    return file ? (
       <div className="space-y-4">
-        <FileList files={files} setFiles={setFiles} />
-        <Button
-          onClick={() => handleUpload(files)}
-          className="cursor-pointer"
-          disabled={isUploading}
-        >
-          {isUploading && <Loader className="animate-spin" />}
-          {isUploading ? "Uploading" : "Upload"}
-        </Button>
+        <FileCard
+          file={file}
+          setFile={setFile}
+          isUploading={isUploading}
+          handleUpload={handleUpload}
+          setUploadError={setUploadError}
+        />
+
         {uploadError && (
           <p className="text-xs text-red-500 mt-2">{uploadError}</p>
         )}
       </div>
+    ) : (
+      renderDropZone()
     );
   }
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-3">
-        {data.map(({ title, thumb_url, url }) => (
-          <ResultCard title={title} thumbUrl={thumb_url} url={url} />
-        ))}
+      <div className="space-y-2 lg:space-y-0 grid lg:grid-cols-2 lg:gap-3">
+        {result &&
+          result.payload.map((keyword, i) => (
+            <GoogleSearchCard keyword={keyword} key={i} />
+          ))}
       </div>
-      <Button onClick={() => setData(null)}>Clear</Button>
-    </div>
-  );
-}
-
-function FileList({
-  files,
-  setFiles,
-}: {
-  files: File[];
-  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
-}) {
-  const removeFile = (file: File) => {
-    const newFiles = files.filter((f) => f !== file);
-    setFiles(newFiles);
-  };
-
-  const computeFileSize = (file: File) => {
-    switch (true) {
-      case file.size < 1024: // Less than 1KB
-        return `${file.size.toFixed(2)} B`;
-      case file.size < 1024 * 1024: // Less than 1MB
-        return `${(file.size / 1024).toFixed(2)} KB`;
-      case file.size < 1024 * 1024 * 1024: // Less than 1GB
-        return `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
-      default:
-        return `${(file.size / 1024).toFixed(2)} KB`;
-    }
-  };
-
-  return (
-    <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-2">
-      {files.map((file, index) => (
-        <div
-          key={index}
-          className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow"
-        >
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center p-5">
-              <span className="text-xs font-medium">
-                {file.name.split(".").pop()?.toUpperCase()}
-              </span>
-            </div>
-
-            <div className="flex flex-col items-start space-y-1">
-              <p className="text-sm font-medium truncate max-w-[15rem] sm:max-w-xs">
-                {file.name}
-              </p>
-              <p className="text-xs text-gray-500">{computeFileSize(file)}</p>
-            </div>
-          </div>
-
-          <Button variant="ghost" size="sm" onClick={() => removeFile(file)}>
-            <Trash2 className="w-4 h-4" />
-          </Button>
-        </div>
-      ))}
+      <Button onClick={() => setResult(null)}>Clear</Button>
     </div>
   );
 }
