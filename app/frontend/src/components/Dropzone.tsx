@@ -4,6 +4,7 @@ import { UploadIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import FileCard from "@/components/FileCard";
+import GoogleSearchCard from "./GoogleSearchCard";
 
 type APIResponse = {
   payload: string[];
@@ -138,9 +139,11 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-3">
-        <p>{result["payload"]}</p>
-        {/* <ResultCard title={title} thumbUrl={thumb_url} url={url} /> */}
+      <div className="space-y-2 lg:space-y-0 grid lg:grid-cols-2 lg:gap-3">
+        {result &&
+          result.payload.map((keyword, i) => (
+            <GoogleSearchCard keyword={keyword} key={i} />
+          ))}
       </div>
       <Button onClick={() => setResult(null)}>Clear</Button>
     </div>
