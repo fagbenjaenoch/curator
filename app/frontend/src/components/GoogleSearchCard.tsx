@@ -9,7 +9,7 @@ export default function GoogleSearchCard({ keyword }: { keyword: string }) {
       href={searchURL}
       target="_blank"
     >
-      <span className="flex gap-2">
+      <span className="flex items-center gap-2">
         <GoogleColored />
         {keyword}
       </span>
