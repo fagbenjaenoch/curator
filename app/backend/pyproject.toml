@@ -1,0 +1,5 @@
+[tool.deptry]
+ignore = ["DEP002"] 
+
+[tool.deptry.per_rule_ignores]
+DEP002 = ["uvicorn"]

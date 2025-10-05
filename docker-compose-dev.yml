@@ -8,18 +8,21 @@ services:
   frontend:
     build:
       context: ./app/frontend
-      target: prod
+      target: dev
     depends_on:
       - backend
     ports:
       - "5173:5173"
     networks:
       - curator
+    volumes:
+      - ./app/frontend:/app
+      - /app/node_modules
 
   backend:
     build:
       context: ./app/backend
-      target: prod
+      target: dev
     ports:
       - "8000:8000"
     volumes:
@@ -40,6 +43,8 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    networks:
+      - curator
 
 volumes:
   db_data:
