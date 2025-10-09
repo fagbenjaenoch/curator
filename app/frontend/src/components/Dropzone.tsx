@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import FileCard from "@/components/FileCard";
 import GoogleSearchCard from "./GoogleSearchCard";
+import Disclaimer from "./ui/Disclaimer";
 
 type APIResponse = {
   payload: string[];
@@ -133,7 +134,10 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
         )}
       </div>
     ) : (
-      renderDropZone()
+      <div className="space-y-8">
+        {renderDropZone()}
+        <Disclaimer />
+      </div>
     );
   }
 
