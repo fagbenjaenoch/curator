@@ -13,11 +13,13 @@ services:
       - backend
     ports:
       - "5173:5173"
-    networks:
-      - curator
     volumes:
       - ./app/frontend:/app
       - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - curator
 
   backend:
     build:
@@ -29,6 +31,7 @@ services:
       - ./app/backend:/app
     environment:
       - PYTHONUNBUFFERED=1
+      - WATCHFILES_FORCE_POLLING=true
     networks:
       - curator
 
