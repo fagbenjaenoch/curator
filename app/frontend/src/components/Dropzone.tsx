@@ -141,11 +141,16 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2 lg:space-y-0 grid lg:grid-cols-2 lg:gap-3">
-        {result &&
-          result.payload.map((keyword, i) => (
-            <GoogleSearchCard keyword={keyword} key={i} />
-          ))}
+      <div className="space-y-2">
+        <p className="text-left font-[600]">
+          Keywords found in <b>{file?.name}</b>
+        </p>
+        <div className="space-y-2 lg:space-y-0 grid lg:grid-cols-2 lg:gap-3">
+          {result &&
+            result.payload.map((keyword, i) => (
+              <GoogleSearchCard keyword={keyword} key={i} />
+            ))}
+        </div>
       </div>
       <Button onClick={() => setResult(null)}>Clear</Button>
     </div>
