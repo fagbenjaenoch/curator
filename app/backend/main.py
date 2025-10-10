@@ -18,7 +18,7 @@ app.add_middleware(
 
 @app.get("/")
 def index():
-    return {"message": "Hello from python"}
+    return {"message": "Hello from python backend"}
 
 
 app.include_router(v1.router, prefix="/v1")
