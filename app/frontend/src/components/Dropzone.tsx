@@ -139,7 +139,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <p className="text-left font-[600]">
+        <p className="text-sm text-left">
           Keywords found in <b>{file?.name}</b>
         </p>
         <div className="space-y-2 lg:space-y-0 grid lg:grid-cols-2 lg:gap-3">
