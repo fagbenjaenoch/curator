@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "lucide-react";
 import { useCallback, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import FileCard from "@/components/FileCard";
 import GoogleSearchCard from "./GoogleSearchCard";
 import Disclaimer from "./ui/Disclaimer";

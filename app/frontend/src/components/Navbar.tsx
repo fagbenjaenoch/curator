@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import Github from "@/components/ui/Github";
 
 export default function Navbar() {
