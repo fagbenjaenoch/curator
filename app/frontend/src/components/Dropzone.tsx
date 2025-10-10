@@ -102,12 +102,10 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
         )}
       >
         <input {...getInputProps()} />
-        <div className="text-center">
-          <UploadIcon className="w-8 h-8 text-gray-400 inline-block" />
-          <p className="text-gray-500">
-            Select or drag and drop your files here
-          </p>
-          <p className="text-xs text-gray-400">(PDF files up to 5MB)</p>
+        <div className="text-center text-gray-400">
+          <UploadIcon className="w-8 h-8 inline-block" />
+          <p>Select or drag and drop your files here</p>
+          <p className="text-xs">(PDF files up to 5MB)</p>
         </div>
 
         {internalError && (
