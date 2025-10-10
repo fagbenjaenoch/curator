@@ -30,7 +30,7 @@ export default function FileCard({
         </div>
 
         <div className="flex flex-col items-start space-y-1">
-          <p className="text-sm font-medium truncate max-w-xs sm:max-w-[30rem]">
+          <p className="text-sm truncate max-w-xs sm:max-w-[30rem]">
             {file.name}
           </p>
           <p className="text-xs text-gray-500">{computeFileSize(file)}</p>

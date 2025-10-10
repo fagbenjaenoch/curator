@@ -123,7 +123,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground  text-base font-[600];
+    @apply bg-background text-foreground  text-base font-bold;
     font-family: "Satoshi-Variable", sans-serif;
   }
 }
