@@ -8,10 +8,12 @@
       "path": "./tsconfig.node.json"
     }
   ],
-  "include": [
-    "src"
+  "exclude": [
+    "src/**/*.d.ts"
   ],
   "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
     "baseUrl": ".",
     "paths": {
       "@/*": [
