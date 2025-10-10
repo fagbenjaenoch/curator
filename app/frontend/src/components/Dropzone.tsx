@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, serverUrl } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
 import { UploadIcon } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -60,13 +60,10 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     formData.append("file", file);
 
     try {
-      const response = await fetch(
-        "http://localhost:8000/v1/extract-pdf-keywords",
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
+      const response = await fetch(`${serverUrl}/extract-pdf-keywords`, {
+        method: "POST",
+        body: formData,
+      });
       const result = await response.json();
 
       setResult(result as APIResponse);

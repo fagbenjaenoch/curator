@@ -17,3 +17,6 @@ export function computeFileSize(file: File) {
       return `${(file.size / 1024).toFixed(2)} KB`;
   }
 }
+
+export const serverUrl =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:8000/v1";
