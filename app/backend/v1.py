@@ -1,3 +1,4 @@
+import asyncio
 from fastapi import APIRouter, Request, File, UploadFile
 from keybert import KeyBERT
 from sentence_transformers import SentenceTransformer
@@ -11,19 +12,23 @@ kw_model = KeyBERT(model_name)
 router = APIRouter()
 
 
+async def extract_keywords(text):
+    return await asyncio.to_thread(
+        kw_model.extract_keywords, text, keyphrase_ngram_range=(1, 2)
+    )  # keyphrase_ngram_range sets the amount of words per phrase
+
+
 @router.get("/keywords")
 async def get_keywords(request: Request):
     body: dict = await request.json()
-    rawText = body.get("raw")
+    raw_text = body.get("raw")
 
-    if rawText is None:
+    if raw_text is None:
         return {"error": "Missing 'raw' field in request body."}
 
-    result = kw_model.extract_keywords(
-        rawText, keyphrase_ngram_range=(1, 2)
-    )  # keyphrase_ngram_range sets the amount of words per phrase
+    keywords = await extract_keywords(raw_text)
 
-    return {"result": result}
+    return {"result": keywords}
 
 
 @router.post("/extract-pdf-content")
@@ -51,9 +56,7 @@ async def extract_pdf_keywords(file: UploadFile = File(...)):
         page = doc[page_num]
         parsed_text += page.get_text("text")  # type: ignore
 
-    result = kw_model.extract_keywords(
-        parsed_text, keyphrase_ngram_range=(1, 2)
-    )  # keyphrase_ngram_range sets the amount of words per phrase
+    result = await extract_keywords(parsed_text)
 
     keywords = [(f"{k[0]} tutorial") for k in result]
 
