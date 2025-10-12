@@ -21,7 +21,7 @@ export default function FileCard({
   };
 
   return (
-    <div className="mx-auto max-w-[700px] flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow">
+    <div className="mx-auto max-w-[700px] flex flex-col gap-4 self-end md:flex-row md:items-center md:justify-between p-3 bg-white rounded-md border border-gray-200 shadow">
       <div className="flex items-center gap-2">
         <div className="w-16 h-16 bg-gray-300 rounded flex items-center justify-center p-5">
           <span className="text-xs font-lg">
