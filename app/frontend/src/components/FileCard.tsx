@@ -23,14 +23,14 @@ export default function FileCard({
   return (
     <div className="mx-auto max-w-[700px] flex flex-col gap-4 self-end md:flex-row md:items-center md:justify-between p-3 bg-white rounded-md border border-gray-200 shadow">
       <div className="flex items-center gap-2">
-        <div className="w-16 h-16 bg-gray-300 rounded flex items-center justify-center p-5">
+        <div className="w-16 h-16 bg-gray-300 rounded self-start flex items-center justify-center p-5">
           <span className="text-xs font-lg">
             {file.name.split(".").pop()?.toUpperCase()}
           </span>
         </div>
 
         <div className="flex flex-col items-start space-y-1">
-          <p className="text-sm truncate max-w-xs sm:max-w-[30rem]">
+          <p className="text-sm text-left max-w-xs sm:max-w-[25rem] wrap-break-word">
             {file.name}
           </p>
           <p className="text-xs text-gray-500">{computeFileSize(file)}</p>
