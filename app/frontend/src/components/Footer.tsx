@@ -11,7 +11,7 @@ export default function Footer() {
             <small className="block">Built with a step out of comfort</small>
             <div className="text-xs text-green-500 bg-green-100 border-1 border-green-500 w-max p-1 px-2 rounded-full inline-flex items-center gap-1">
               <StatusIndicator />
-              <p>Available for hire</p>
+              <p>Open to work</p>
             </div>
           </div>
           <div className="space-x-4 text-xs">
