@@ -50,6 +50,7 @@ async def extract_pdf_keywords(file: UploadFile = File(...)):
     pdf_bytes = await file.read()
 
     doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
+    print("Hi")
 
     parsed_text = ""
     for page_num in range(len(doc)):
