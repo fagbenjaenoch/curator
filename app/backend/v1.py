@@ -13,7 +13,7 @@ router = APIRouter()
 async def extract_keywords(text):
     return await asyncio.to_thread(
         kw_model.extract_keywords, text, keyphrase_ngram_range=(1, 2)
-    )  # keyphrase_ngram_range sets the amount of words per phrase
+    )
 
 
 @router.get("/keywords")
