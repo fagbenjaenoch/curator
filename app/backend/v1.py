@@ -1,12 +1,10 @@
 import asyncio
 from fastapi import APIRouter, Request, File, UploadFile
 from keybert import KeyBERT
-from sentence_transformers import SentenceTransformer
 import pymupdf
 
 
 model_name = "paraphrase-MiniLM-L6-v2"
-sentence_model = SentenceTransformer(model_name)
 kw_model = KeyBERT(model_name)
 
 router = APIRouter()
