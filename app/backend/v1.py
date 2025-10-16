@@ -29,20 +29,6 @@ async def get_keywords(request: Request):
     return {"result": keywords}
 
 
-@router.post("/extract-pdf-content")
-async def extract_pdf_content(file: UploadFile = File(...)):
-    pdf_bytes = await file.read()
-
-    doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
-
-    parsed_text = ""
-    for page_num in range(len(doc)):
-        page = doc[page_num]
-        parsed_text += page.get_text("text")  # type: ignore
-
-    return {"payload": parsed_text, "filename": file.filename, "pages": len(doc)}
-
-
 @router.post("/extract-pdf-keywords")
 async def extract_pdf_keywords(file: UploadFile = File(...)):
     pdf_bytes = await file.read()
