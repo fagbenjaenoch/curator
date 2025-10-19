@@ -8,6 +8,7 @@ from keybert import KeyBERT
 from keybert.backend import BaseEmbedder
 from langchain_huggingface import HuggingFaceEmbeddings
 
+# from sentence_transformers import SentenceTransformer
 # from langchain_community.cache import RedisCache, InMemoryCache
 from langchain_community.storage import RedisStore
 from langchain_core.stores import InMemoryByteStore
@@ -16,7 +17,6 @@ import numpy as np
 
 
 # redis_client = redis.Redis(host="localhost", port=6379, db=0)
-
 redis_store = RedisStore(redis_url="redis://localhost:6379", namespace="keybert-cache")
 
 in_memory_store = InMemoryByteStore()
@@ -29,10 +29,6 @@ cached_embedder = CacheBackedEmbeddings.from_bytes_store(
     namespace=underlying_embeddings.model_name,
     key_encoder="sha256",
 )
-
-kw_model = KeyBERT(model_name)
-
-router = APIRouter()
 
 
 class LangChainEmbedder(BaseEmbedder):
@@ -48,6 +44,12 @@ class LangChainEmbedder(BaseEmbedder):
         # TODO: add a check below if documents is not a type of List[str]
         embeddings = self.embedding_model.embed_documents(documents)
         return np.array(embeddings)
+
+
+# sentence_model = SentenceTransformer(model_name)
+kw_model = KeyBERT(model=LangChainEmbedder(cached_embedder))  # type: ignore
+
+router = APIRouter()
 
 
 async def extract_keywords(doc, doc_embeddings):
