@@ -5,6 +5,7 @@ from typing import List
 import pymupdf
 from fastapi import APIRouter, Request, File, UploadFile
 from keybert import KeyBERT
+from keybert.backend import BaseEmbedder
 from langchain_huggingface import HuggingFaceEmbeddings
 
 # from langchain_community.cache import RedisCache, InMemoryCache
@@ -34,15 +35,18 @@ kw_model = KeyBERT(model_name)
 router = APIRouter()
 
 
-class LangChainEmbedder:
+class LangChainEmbedder(BaseEmbedder):
 
-    def __init__(self, embedding_model, word_embedding_model=None):
+    def __init__(
+        self,
+        embedding_model,
+    ):
+        super().__init__()
         self.embedding_model = embedding_model
-        self.word_embedding_model = word_embedding_model
 
-    async def aembed(self, documents: List[str], verbose: bool = False) -> np.ndarray:
+    def embed(self, documents: List[str], verbose: bool = False) -> np.ndarray:
         # TODO: add a check below if documents is not a type of List[str]
-        embeddings = await self.embedding_model.aembed_documents(documents)
+        embeddings = self.embedding_model.embed_documents(documents)
         return np.array(embeddings)
 
 
