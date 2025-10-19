@@ -1,18 +1,56 @@
 import asyncio
+from typing import List
+
+# import redis
+import pymupdf
 from fastapi import APIRouter, Request, File, UploadFile
 from keybert import KeyBERT
-import pymupdf
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
+# from langchain_community.cache import RedisCache, InMemoryCache
+from langchain_community.storage import RedisStore
+from langchain_core.stores import InMemoryByteStore
+from langchain_classic.embeddings.cache import CacheBackedEmbeddings
+import numpy as np
+
+
+# redis_client = redis.Redis(host="localhost", port=6379, db=0)
+
+redis_store = RedisStore(redis_url="redis://localhost:6379", namespace="keybert-cache")
+
+in_memory_store = InMemoryByteStore()
 
 model_name = "paraphrase-MiniLM-L6-v2"
+underlying_embeddings = HuggingFaceEmbeddings(model_name=model_name)
+cached_embedder = CacheBackedEmbeddings.from_bytes_store(
+    underlying_embeddings,
+    document_embedding_cache=in_memory_store,
+    namespace=underlying_embeddings.model_name,
+)
+
 kw_model = KeyBERT(model_name)
 
 router = APIRouter()
 
 
-async def extract_keywords(text):
+class LangChainEmbedder:
+
+    def __init__(self, embedding_model, word_embedding_model=None):
+        self.embedding_model = embedding_model
+        self.word_embedding_model = word_embedding_model
+
+    async def aembed(self, documents: List[str], verbose: bool = False) -> np.ndarray:
+        # TODO: add a check below if documents is not a type of List[str]
+        embeddings = await self.embedding_model.aembed_documents(documents)
+        return np.array(embeddings)
+
+
+async def extract_keywords(doc, doc_embeddings):
     return await asyncio.to_thread(
-        kw_model.extract_keywords, text, keyphrase_ngram_range=(1, 2)
+        kw_model.extract_keywords,
+        doc,
+        doc_embeddings=doc_embeddings,
+        keyphrase_ngram_range=(1, 2),
     )
 
 
@@ -24,7 +62,7 @@ async def get_keywords(request: Request):
     if raw_text is None:
         return {"error": "Missing 'raw' field in request body."}
 
-    keywords = await extract_keywords(raw_text)
+    keywords = await extract_keywords(raw_text, doc_embeddings=None)
 
     return {"result": keywords}
 
@@ -36,12 +74,15 @@ async def extract_pdf_keywords(file: UploadFile = File(...)):
     doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
 
     parsed_text = ""
-    for page_num in range(len(doc)):
-        page = doc[page_num]
+    for page in doc:
         parsed_text += page.get_text("text")  # type: ignore
 
-    result = await extract_keywords(parsed_text)
+    doc_embedding = await cached_embedder.aembed_documents([parsed_text])
 
-    keywords = [(f"{k[0]} tutorial") for k in result]
+    result = await extract_keywords(
+        doc=parsed_text, doc_embeddings=np.array(doc_embedding)
+    )
+
+    keywords = [(f"{k[0]}") for k in result]
 
     return {"payload": keywords, "filename": file.filename, "pages": len(doc)}
