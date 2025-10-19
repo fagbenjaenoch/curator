@@ -5,7 +5,7 @@ from typing import List
 import pymupdf
 from fastapi import APIRouter, Request, File, UploadFile
 from keybert import KeyBERT
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 
 # from langchain_community.cache import RedisCache, InMemoryCache
 from langchain_community.storage import RedisStore
