@@ -26,6 +26,7 @@ cached_embedder = CacheBackedEmbeddings.from_bytes_store(
     underlying_embeddings,
     document_embedding_cache=in_memory_store,
     namespace=underlying_embeddings.model_name,
+    key_encoder="sha256",
 )
 
 kw_model = KeyBERT(model_name)
