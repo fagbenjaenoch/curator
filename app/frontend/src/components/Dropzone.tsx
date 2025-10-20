@@ -1,6 +1,6 @@
 import { cn, serverUrl } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
-import { UploadIcon } from "lucide-react";
+import { RefreshCw, UploadIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import FileCard from "@/components/FileCard";
@@ -72,6 +72,11 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
     } finally {
       setIsUploading(false);
     }
+  };
+
+  const clearAnalysis = () => {
+    setResult(null);
+    setFile(null);
   };
 
   const acceptedFiletypes = {
@@ -149,7 +154,10 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
             ))}
         </div>
       </div>
-      <Button onClick={() => setResult(null)}>Clear</Button>
+      <Button className="cursor-pointer" onClick={() => clearAnalysis()}>
+        <RefreshCw />
+        New Analysis
+      </Button>
     </div>
   );
 }
