@@ -15,7 +15,6 @@ from langchain_core.stores import InMemoryByteStore
 from langchain_classic.embeddings.cache import CacheBackedEmbeddings
 import numpy as np
 
-
 # redis_client = redis.Redis(host="localhost", port=6379, db=0)
 redis_store = RedisStore(redis_url="redis://localhost:6379", namespace="keybert-cache")
 
