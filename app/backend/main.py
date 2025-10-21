@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import time
+from datetime import datetime
 import v1
 
 app = FastAPI()
@@ -19,7 +19,7 @@ app.add_middleware(
 
 @app.get("/")
 def index():
-    return {"status": "ok", time: time.time()}
+    return {"status": "ok", "time": datetime.now()}
 
 
 app.include_router(v1.router, prefix="/v1")
