@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import time
 import v1
 
 app = FastAPI()
@@ -18,7 +19,7 @@ app.add_middleware(
 
 @app.get("/")
 def index():
-    return {"message": "Hello from python backend"}
+    return {"status": "ok", time: time.time()}
 
 
 app.include_router(v1.router, prefix="/v1")
