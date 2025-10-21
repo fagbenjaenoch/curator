@@ -19,7 +19,7 @@ app.add_middleware(
 
 @app.get("/")
 def index():
-    return {"status": "ok", "time": datetime.now()}
+    return {"status": "okay", "time": datetime.now()}
 
 
 app.include_router(v1.router, prefix="/v1")

@@ -8,7 +8,6 @@ from keybert import KeyBERT
 from keybert.backend import BaseEmbedder
 from langchain_huggingface import HuggingFaceEmbeddings
 
-# from sentence_transformers import SentenceTransformer
 # from langchain_community.cache import RedisCache, InMemoryCache
 from langchain_community.storage import RedisStore
 from langchain_core.stores import InMemoryByteStore
@@ -45,17 +44,15 @@ class LangChainEmbedder(BaseEmbedder):
         return np.array(embeddings)
 
 
-# sentence_model = SentenceTransformer(model_name)
 kw_model = KeyBERT(model=LangChainEmbedder(cached_embedder))  # type: ignore
 
 router = APIRouter()
 
 
-async def extract_keywords(doc, doc_embeddings):
+async def extract_keywords(doc):
     return await asyncio.to_thread(
         kw_model.extract_keywords,
         doc,
-        doc_embeddings=doc_embeddings,
         keyphrase_ngram_range=(1, 2),
     )
 
@@ -68,7 +65,7 @@ async def get_keywords(request: Request):
     if raw_text is None:
         return {"error": "Missing 'raw' field in request body."}
 
-    keywords = await extract_keywords(raw_text, doc_embeddings=None)
+    keywords = await extract_keywords(raw_text)
 
     return {"result": keywords}
 
@@ -83,11 +80,7 @@ async def extract_pdf_keywords(file: UploadFile = File(...)):
     for page in doc:
         parsed_text += page.get_text("text")  # type: ignore
 
-    doc_embedding = await cached_embedder.aembed_documents([parsed_text])
-
-    result = await extract_keywords(
-        doc=parsed_text, doc_embeddings=np.array(doc_embedding)
-    )
+    result = await extract_keywords(parsed_text)
 
     keywords = [(f"{k[0]}") for k in result]
 
