@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router";
-import Result from "@/components/pages/Result";
 import Landing from "@/components/pages/Landing";
+import Result from "@/components/pages/Result";
 
 const queryClient = new QueryClient();
 

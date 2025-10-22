@@ -1,5 +1,5 @@
-import StatusIndicator from "@/components/ui/StatusIndicator";
 import Github from "@/components/ui/Github";
+import StatusIndicator from "@/components/ui/StatusIndicator";
 import X from "@/components/ui/X";
 
 export default function Footer() {

@@ -1,6 +1,6 @@
-import { computeFileSize } from "@/lib/utils";
 import { Loader } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { computeFileSize } from "@/lib/utils";
 
 export default function FileCard({
   file,
@@ -15,10 +15,10 @@ export default function FileCard({
   setUploadError: React.Dispatch<React.SetStateAction<string | null>>;
   isUploading: boolean;
   handleUpload: (file: File) => void;
-  uploadController?: AbortController;
+  uploadController: AbortController;
 }) {
   const removeFile = () => {
-    uploadController && uploadController.abort("fetch was canceled");
+    uploadController.abort("fetch was canceled");
     setUploadError(null);
     setFiles(null);
   };
@@ -55,7 +55,7 @@ export default function FileCard({
           className="cursor-pointer"
           onClick={() => removeFile()}
         >
-          {isUploading ? "Cancel" : "Remove"}
+          {isUploading ? "cancel" : "Remove"}
         </Button>
       </div>
     </div>
