@@ -1,4 +1,8 @@
 import asyncio
+from typing import List
+from ratelimiter import limiter
+
+# import redis
 import pymupdf
 from fastapi import APIRouter, Request, File, UploadFile
 from keybert import KeyBERT
@@ -19,6 +23,7 @@ async def extract_keywords(doc):
 
 
 @router.get("/keywords")
+@limiter.limit("5/minute")
 async def get_keywords(request: Request):
     body: dict = await request.json()
     raw_text = body.get("raw")
@@ -32,7 +37,8 @@ async def get_keywords(request: Request):
 
 
 @router.post("/extract-pdf-keywords")
-async def extract_pdf_keywords(file: UploadFile = File(...)):
+@limiter.limit("5/minute")
+async def extract_pdf_keywords(request: Request, file: UploadFile = File(...)):
     pdf_bytes = await file.read()
 
     doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
