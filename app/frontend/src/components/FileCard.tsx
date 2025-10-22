@@ -55,7 +55,7 @@ export default function FileCard({
           className="cursor-pointer"
           onClick={() => removeFile()}
         >
-          {isUploading ? "cancel" : "Remove"}
+          {isUploading ? "Cancel" : "Remove"}
         </Button>
       </div>
     </div>
