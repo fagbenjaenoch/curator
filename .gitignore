@@ -1,5 +1,4 @@
 # Root
-app/frontend/node_modules
 pnpm-lock.yaml
 .env
 .DS_Store
