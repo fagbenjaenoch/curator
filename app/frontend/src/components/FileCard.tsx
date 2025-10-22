@@ -18,9 +18,9 @@ export default function FileCard({
   uploadController?: AbortController;
 }) {
   const removeFile = () => {
+    uploadController && uploadController.abort("fetch was canceled");
     setUploadError(null);
     setFiles(null);
-    uploadController && uploadController.abort();
   };
 
   return (

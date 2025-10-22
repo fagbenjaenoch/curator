@@ -73,6 +73,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
       console.error(error);
     } finally {
       setIsUploading(false);
+      fetchController.current = new AbortController();
     }
   };
 
