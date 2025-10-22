@@ -1,7 +1,7 @@
 import { cn, serverUrl } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
 import { RefreshCw, UploadIcon } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import FileCard from "@/components/FileCard";
 import GoogleSearchCard from "./GoogleSearchCard";
@@ -20,6 +20,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState<APIResponse | null>(null);
+  const fetchController = useRef<AbortController>(new AbortController());
   const totalFileSize = file?.size ?? 0;
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -63,6 +64,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
       const response = await fetch(`${serverUrl}/extract-pdf-keywords`, {
         method: "POST",
         body: formData,
+        signal: fetchController.current.signal,
       });
       const result = await response.json();
 
@@ -127,6 +129,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
           isUploading={isUploading}
           handleUpload={handleUpload}
           setUploadError={setUploadError}
+          uploadController={fetchController.current}
         />
 
         {uploadError && (

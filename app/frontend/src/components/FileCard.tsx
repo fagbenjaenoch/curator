@@ -8,16 +8,19 @@ export default function FileCard({
   isUploading,
   handleUpload,
   setUploadError,
+  uploadController,
 }: {
   file: File;
   setFile: React.Dispatch<React.SetStateAction<File | null>>;
   setUploadError: React.Dispatch<React.SetStateAction<string | null>>;
   isUploading: boolean;
   handleUpload: (file: File) => void;
+  uploadController?: AbortController;
 }) {
   const removeFile = () => {
     setUploadError(null);
     setFiles(null);
+    uploadController && uploadController.abort();
   };
 
   return (
