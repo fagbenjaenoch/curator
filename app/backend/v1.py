@@ -1,10 +1,8 @@
 import asyncio
+import pymupdf
 from typing import List
 from ratelimiter import limiter
-
-# import redis
-import pymupdf
-from fastapi import APIRouter, Request, File, UploadFile
+from fastapi import APIRouter, Request, File, UploadFile, HTTPException
 from keybert import KeyBERT
 from keybert.backend import BaseEmbedder
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -14,6 +12,9 @@ from langchain_community.storage import RedisStore
 from langchain_core.stores import InMemoryByteStore
 from langchain_classic.embeddings.cache import CacheBackedEmbeddings
 import numpy as np
+
+router = APIRouter()
+
 
 # redis_client = redis.Redis(host="localhost", port=6379, db=0)
 redis_store = RedisStore(redis_url="redis://localhost:6379", namespace="keybert-cache")
@@ -47,7 +48,9 @@ class LangChainEmbedder(BaseEmbedder):
 
 kw_model = KeyBERT(model=LangChainEmbedder(cached_embedder))  # type: ignore
 
-router = APIRouter()
+
+MAX_FILE_SIZE_MB = 5
+MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024
 
 
 async def extract_keywords(doc):
@@ -75,6 +78,19 @@ async def get_keywords(request: Request):
 @router.post("/extract-pdf-keywords")
 @limiter.limit("5/minute")
 async def extract_pdf_keywords(request: Request, file: UploadFile = File(...)):
+    if file.content_type not in [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid file type. Only pdf and docx files are allowed",
+        )
+
+    if file.size and file.size > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=400, detail=f"File is larger than {MAX_FILE_SIZE_MB}MB"
+        )
     pdf_bytes = await file.read()
 
     doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
