@@ -1,16 +1,17 @@
 import asyncio
-from ratelimiter import limiter
-
-# import redis
 import pymupdf
-from fastapi import APIRouter, Request, File, UploadFile
+from ratelimiter import limiter
+from fastapi import APIRouter, Request, File, UploadFile, HTTPException
 from keybert import KeyBERT
 
+router = APIRouter()
 
 model_name = "paraphrase-MiniLM-L6-v2"
 kw_model = KeyBERT(model_name)  # type: ignore
 
-router = APIRouter()
+
+MAX_FILE_SIZE_MB = 5
+MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024
 
 
 async def extract_keywords(doc):
@@ -38,6 +39,19 @@ async def get_keywords(request: Request):
 @router.post("/extract-pdf-keywords")
 @limiter.limit("5/minute")
 async def extract_pdf_keywords(request: Request, file: UploadFile = File(...)):
+    if file.content_type not in [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid file type. Only pdf and docx files are allowed",
+        )
+
+    if file.size and file.size > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=400, detail=f"File is larger than {MAX_FILE_SIZE_MB}MB"
+        )
     pdf_bytes = await file.read()
 
     doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
