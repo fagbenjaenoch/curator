@@ -14,7 +14,7 @@ type APIResponse = {
 };
 
 export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
-  const FILE_THRESHOLD = 5 * 1024 * 1024; // 5MB
+  const FILE_THRESHOLD = 1 * 1024 * 1024; // 1MB
   const [file, setFile] = useState<File | null>(null);
   const [internalError, setInternalError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
