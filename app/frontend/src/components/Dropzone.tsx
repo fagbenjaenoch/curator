@@ -110,7 +110,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
         <div className="text-center text-gray-400">
           <UploadIcon className="w-8 h-8 inline-block" />
           <p>Select or drag and drop your files here</p>
-          <p className="text-xs">(PDF files up to 5MB)</p>
+          <p className="text-xs">{`(PDF files up to ${(FILE_THRESHOLD / (1024 * 1024)).toFixed(0)}MB)`}</p>
         </div>
 
         {internalError && (
