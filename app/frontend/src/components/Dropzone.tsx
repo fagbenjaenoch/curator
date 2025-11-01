@@ -102,7 +102,7 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
         {...getRootProps()}
         {...props}
         className={cn(
-          "grid place-items-center border-8 border-dashed border-gray-200 hover:border-gray-300 rounded-4xl w-[400px] h-[300px] lg:w-[700px] lg:h-[400px] cursor-pointer mx-auto transition-colors",
+          "grid place-items-center border-8 border-dashed border-gray-200 hover:border-gray-300 rounded-4xl w-full h-[300px] lg:w-[700px] lg:h-[400px] cursor-pointer mx-auto transition-colors",
           isDragActive && "border-green-400",
         )}
       >
