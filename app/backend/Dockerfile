@@ -7,7 +7,7 @@ WORKDIR /app
 # --------- PROD STAGE --------- 
 FROM base AS prod
 
-ENV UV_COMPILE_BYTECODE=1
+COPY pyproject.toml .
 
 RUN uv sync --locked
 
@@ -20,7 +20,7 @@ CMD ["uv", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", 
 # --------- DEV STAGE --------- 
 FROM base AS dev
 
-ENV UV_COMPILE_BYTECODE=1
+COPY pyproject.toml .
 
 RUN uv sync --locked
 
