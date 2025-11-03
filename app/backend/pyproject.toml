@@ -1,5 +1,31 @@
+[project]
+name = "curator-backend"
+version = "0.1.0"
+description = "Backend service for Curator project"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Enoch Fagbenja", email = "fagbenjaenoch73@gmail.com" },
+]
+
+dependencies = [
+  "fastapi==0.95.2",
+  "keybert==0.9.0",
+  "langchain-huggingface==1.0.0",
+  "python-dotenv==1.0.0",
+  "PyMuPDF==1.26.4",
+  "redis==6.4.0",
+  "slowapi==0.1.9",
+  "uvicorn[standard]==0.22.0"
+]
+
+[build-system]
+requires = ["setuptools==68.0.0", "wheel==0.40.0"]
+build-backend = "setuptools.build_meta"
+
 [tool.deptry]
-ignore = ["DEP002"] 
+ignore = ["DEP002"]
 
 [tool.deptry.per_rule_ignores]
 DEP002 = ["uvicorn"]
