@@ -32,6 +32,7 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - WATCHFILES_FORCE_POLLING=true
+      - UV_COMPILE_BYTECODE=1
     networks:
       - curator
 
