@@ -17,12 +17,27 @@ dependencies = [
   "PyMuPDF",
   "redis",
   "slowapi",
+  "torch==2.8.0+cpu",
+  "torchvision==0.23.0+cpu",
   "uvicorn[standard]"
 ]
 
-[build-system]
-requires = ["setuptools==68.0.0", "wheel==0.40.0"]
-build-backend = "setuptools.build_meta"
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cpu" },
+]
+torchvision = [
+    { index = "pytorch-cpu" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv]
+required-environments = ["sys_platform == 'win32' and platform_machine == 'AMD64'"]
+
 
 [tool.deptry]
 ignore = ["DEP002"]
