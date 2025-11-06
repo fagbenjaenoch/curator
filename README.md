@@ -6,8 +6,8 @@ It works by parsing your document, extracting the text and running it through a 
 
 <img width="1333" height="574" alt="image" src="https://github.com/user-attachments/assets/84b6dc1b-3e2e-4f5b-9680-b5dfb0895e97" />
 
-## Launching soon
-Major Progress has been made, hopeful to launch it within the next few weeks!
+## Limitations
+The machine that I'm developing this application on does not have an nvidia gpu so the application has been configured to run on cpu which is not efficient, please bear with me.
 
 ## License
 
