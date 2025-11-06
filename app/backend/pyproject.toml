@@ -12,6 +12,9 @@ authors = [
 dependencies = [
   "fastapi",
   "keybert",
+  "langchain-classic",
+  "langchain_core",
+  "langchain_community",
   "langchain-huggingface",
   "python-dotenv",
   "PyMuPDF",
