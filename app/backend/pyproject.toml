@@ -17,6 +17,7 @@ dependencies = [
   "langchain_community",
   "langchain-huggingface",
   "python-dotenv",
+  "python-multipart",
   "PyMuPDF",
   "redis",
   "slowapi",
