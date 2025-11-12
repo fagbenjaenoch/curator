@@ -17,7 +17,8 @@ router = APIRouter()
 
 
 # redis_client = redis.Redis(host="localhost", port=6379, db=0)
-redis_store = RedisStore(redis_url="redis://localhost:6379", namespace="keybert-cache")
+redis_store = RedisStore(
+    redis_url="redis://localhost:6379", namespace="keybert-cache")
 
 in_memory_store = InMemoryByteStore()
 
@@ -80,7 +81,7 @@ async def get_keywords(request: Request):
 async def extract_pdf_keywords(request: Request, file: UploadFile = File(...)):
     if file.content_type not in [
         "application/pdf",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        """application/vnd.openxmlformats-officedocument.wordprocessingml.document""",
     ]:
         raise HTTPException(
             status_code=400,
