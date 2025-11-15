@@ -17,7 +17,8 @@ router = APIRouter()
 
 
 # redis_client = redis.Redis(host="localhost", port=6379, db=0)
-redis_store = RedisStore(redis_url="redis://localhost:6379", namespace="keybert-cache")
+redis_store = RedisStore(
+    redis_url="redis://localhost:6379", namespace="keybert-cache")
 
 in_memory_store = InMemoryByteStore()
 
