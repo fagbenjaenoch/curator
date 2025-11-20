@@ -30,12 +30,13 @@ services:
       - curator
 
   db:
-    image: postgres:latest
+    image: postgres:18
     restart: always
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: mydatabase
+      PGDATA: /var/lib/postgresql/data
     ports:
       - "5432:5432"
     volumes:
