@@ -5,7 +5,7 @@ import X from "@/components/ui/X";
 export default function Footer() {
   return (
     <footer>
-      <div className="max-w-7xl mx-auto px-8 py-8">
+      <div className="max-w-5xl mx-auto px-8 py-8">
         <div className="flex justify-between">
           <div className="space-y-2">
             <small className="block">Built with a step out of comfort</small>
