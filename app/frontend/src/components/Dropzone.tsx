@@ -1,6 +1,7 @@
 import { RefreshCw, UploadIcon } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { toast } from "sonner";
 import GoogleSearchCard from "./GoogleSearchCard";
 import Disclaimer from "./ui/Disclaimer";
 import FileCard from "@/components/FileCard";
@@ -71,6 +72,13 @@ export default function Dropzone(props: React.HTMLAttributes<HTMLDivElement>) {
       setResult(result as APIResponse);
     } catch (error) {
       console.error(error);
+      toast.error("Server could not process your request", {
+        description: "Please try again later.",
+        style: {
+          backgroundColor: "oklch(0.577 0.245 27.325)",
+          color: "white",
+        },
+      });
     } finally {
       setIsUploading(false);
       fetchController.current = new AbortController();

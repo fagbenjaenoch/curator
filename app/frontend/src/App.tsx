@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router";
+import { Toaster } from "./components/ui/sonner";
 import Landing from "@/components/pages/Landing";
 import Result from "@/components/pages/Result";
 
@@ -14,6 +15,7 @@ export default function Root(): React.ReactNode {
           <Route path="/result" element={<Result />} />
         </Routes>
       </BrowserRouter>
+      <Toaster />
     </QueryClientProvider>
   );
 }
