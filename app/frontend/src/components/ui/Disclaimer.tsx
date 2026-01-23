@@ -6,8 +6,8 @@ export default function Disclaimer() {
       <InfoIcon size={20} className="shrink-0" />
       <p className="text-left">
         Please note: This app is under active development. The results may not
-        be accurate but will improve over time as we refine the system. For best
-        experience upload a file less than 100KB.
+        be accurate but will improve over time as we refine the system. For the
+        best experience upload a file less than 100KB.
       </p>
     </div>
   );
